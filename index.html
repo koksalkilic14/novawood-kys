@@ -265,15 +265,19 @@ textarea.fi{resize:vertical;min-height:64px}
     // ── Bağlantı durumu ─────────────────────────────────────────
     window._fbReady = true;
     console.log('✅ Firebase bağlandı: novawood-kys');
+    // Ana script hazır olunca listener'ları başlat
+    var tryStart = 0;
+    function tryStartListeners(){
+      if(window.startFirebaseListeners){
+        window.startFirebaseListeners();
+      } else if(tryStart < 30){
+        tryStart++;
+        setTimeout(tryStartListeners, 200);
+      }
+    }
+    setTimeout(tryStartListeners, 500);
 
-    // Sayfa yüklenince dinleyicileri başlat
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        if(typeof startFirebaseListeners === 'function') {
-          startFirebaseListeners();
-        }
-      }, 500);
-    });
+    // Listeners firebase hazır olunca başlatılıyor
   </script>
 </head>
 <body>
@@ -3230,6 +3234,37 @@ function kalibGunlukKontrol(){
 // ════════════════════════════════════════════════════════════
 // FİREBASE REAL-TIME LISTENERS
 // Her koleksiyon Firestore'dan anlık çekiliyor
+
+window.startFirebaseListeners = function() {
+  if(!window.fbListen){ console.error('fbListen hazır değil'); return; }
+  console.log('🔥 Firebase listeners başlatılıyor...');
+  toast('🔥 Firebase bağlandı — veriler yükleniyor...');
+
+  fbListen('gkk',        function(d){ gkkData=d;      renderGKK();renderDash(); });
+  fbListen('proses',     function(d){ prosesData=d;   renderProses(); });
+  fbListen('final',      function(d){ finalData=d;    renderFinal(); });
+  fbListen('burn',       function(d){ burnData=d;     renderBurn(); });
+  fbListen('kalib',      function(d){ kalibData=d;    renderKalib(); });
+  fbListen('msa',        function(d){ msaData=d;      renderMSA(); });
+  fbListen('spc',        function(d){ spcData=d;      renderSPC(); });
+  fbListen('8d',         function(d){ data8d=d;       render8D(); });
+  fbListen('capa',       function(d){ capaData=d;     renderCAPA(); });
+  fbListen('nck',        function(d){ nckData=d;      renderNCK(); });
+  fbListen('sikayet',    function(d){ sikayetData=d;  renderSikayet(); });
+  fbListen('ted',        function(d){ tedData=d;      renderTed(); });
+  fbListen('satin',      function(d){ satinData=d;    renderSatin(); });
+  fbListen('dok',        function(d){ docData=d;      renderDocs(); });
+  fbListen('egitim',     function(d){ egitimData=d;   renderEgitim(); });
+  fbListen('risk',       function(d){ riskData=d;     renderRisk(); });
+  fbListen('denetim',    function(d){ denetimData=d;  renderDenetim(); });
+  fbListen('ygr',        function(d){ ygrData=d;      renderYGR(); });
+  fbListen('5s',         function(d){ data5s=d;       render5S(); });
+  fbListen('lot',        function(d){ lotData=d;      renderLot(); });
+  fbListen('enerji',     function(d){ enerjiData=d;   renderEnerji(); });
+  fbListen('bilgi',      function(d){ bilgiData=d;    renderBilgi(); });
+  console.log('✅ Tüm Firebase listeners başlatıldı');
+};
+
 window.onload=function(){
   renderDash();renderGKK();renderProses();renderFinal();renderBurn();
   kalibGunlukKontrol();renderMSA();renderSPC();render8D();renderCAPA();
@@ -3239,7 +3274,17 @@ window.onload=function(){
   showAkis('Ayous Kereste',null);
   // İlk sekmeyi aktif et
   nav('dash', document.querySelector('.nav-item'));
-  if(window._fbReady)startFirebaseListeners();
+  // Firebase hazır olunca listener'ları başlat
+  var fbCheckCount = 0;
+  function waitForFb(){
+    if(window._fbReady && window.startFirebaseListeners){
+      window.startFirebaseListeners();
+    } else if(fbCheckCount < 20){
+      fbCheckCount++;
+      setTimeout(waitForFb, 300);
+    }
+  }
+  waitForFb();
 };
 
 </script>
