@@ -1882,6 +1882,16 @@ function saveGKK(){
   renderGKK();renderDash();
   closeModal('gkk-modal');
   toast('GKK kaydı eklendi ✓');
+  // Firebase'e kaydet
+  if(window.fbSave){
+    var dataToSave = Object.assign({}, gkkData[0]);
+    delete dataToSave.photos; // base64 çok büyük, URL'leri kaydet
+    dataToSave.photoUrls = gkkData[0].photos || [];
+    fbSave('gkk', dataToSave).then(function(id){
+      if(id){ gkkData[0]._fbId = id; console.log('GKK Firebase kaydedildi:', id); }
+      else { console.error('GKK Firebase kayıt başarısız'); }
+    });
+  }
 
   // Temizle
   ['g-ted','g-parti','g-miktar','g-nem1','g-nem2','g-nem3','g-kayit','g-not'].forEach(function(id){
@@ -2104,6 +2114,7 @@ function saveKalib(){
   renderKalib();
   closeModal('kalib-modal');
   toast('Kalibrasyon kaydı eklendi ✓');
+  if(window.fbSave){var d=Object.assign({},kalibData[0]);delete d.photos;fbSave('kalib',d).then(function(id){if(id)kalibData[0]._fbId=id;});}
   ['k-no','k-ad','k-konum','k-son','k-kurum','k-sertno','k-not'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
   var kp=document.getElementById('k-periyot');if(kp)kp.value='12';
   var ku=document.getElementById('k-uyari');if(ku)ku.value='30';
@@ -2895,6 +2906,7 @@ function saveProses() {
   });
 
   renderProses();closeModal('proses-modal');toast('Proses kaydı eklendi ✓');
+  if(window.fbSave){var d=Object.assign({},prosesData[0]);delete d.photos;fbSave('proses',d).then(function(id){if(id)prosesData[0]._fbId=id;});}
 
   ['p-parti','p-op','p-not','p-nem1','p-nem2','p-nem3'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
   var ne=document.getElementById('p-nem');if(ne){ne.value='';ne.style.color='';ne.style.background='';}
@@ -2969,6 +2981,7 @@ function saveFinal() {
   });
 
   renderFinal();closeModal('final-modal');toast('Final kaydı eklendi ✓');
+  if(window.fbSave){var d=Object.assign({},finalData[0]);delete d.photos;fbSave('final',d).then(function(id){if(id)finalData[0]._fbId=id;});}
 
   ['f-parti','f-miktar','f-profil','f-not','f-nem1','f-nem2','f-nem3'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
   var ne=document.getElementById('f-nem');if(ne){ne.value='';ne.style.color='';ne.style.background='';}
