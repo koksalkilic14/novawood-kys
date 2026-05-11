@@ -173,7 +173,8 @@ textarea.fi{resize:vertical;min-height:64px}
 }
 @media print{.sidebar,.topbar,.btn,.modal-ov,.toast{display:none!important}.content{padding:0;overflow:visible}.sec.active{display:block}}
 </style>
-<!-- Firebase SDK -->
+
+  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -265,19 +266,15 @@ textarea.fi{resize:vertical;min-height:64px}
     // ── Bağlantı durumu ─────────────────────────────────────────
     window._fbReady = true;
     console.log('✅ Firebase bağlandı: novawood-kys');
-    // Ana script hazır olunca listener'ları başlat
-    var tryStart = 0;
-    function tryStartListeners(){
-      if(window.startFirebaseListeners){
-        window.startFirebaseListeners();
-      } else if(tryStart < 30){
-        tryStart++;
-        setTimeout(tryStartListeners, 200);
-      }
-    }
-    setTimeout(tryStartListeners, 500);
 
-    // Listeners firebase hazır olunca başlatılıyor
+    // Sayfa yüklenince dinleyicileri başlat
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        if(typeof startFirebaseListeners === 'function') {
+          startFirebaseListeners();
+        }
+      }, 500);
+    });
   </script>
 </head>
 <body>
@@ -1266,24 +1263,7 @@ textarea.fi{resize:vertical;min-height:64px}
     </div>
     <div class="fg"><label class="fl">Not</label><textarea class="fi" id="b-not"></textarea></div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('b-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="b-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="b-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'b-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('b-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="b-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="b-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'b-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('burn-modal')">İptal</button><button class="btn btn-p" onclick="saveBurn()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('burn-modal')">İptal</button><button class="btn btn-p" onclick="saveBurn()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- KALİBRASYON MODAL -->
@@ -1341,24 +1321,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Sorumlu</label><input class="fi" id="m-sor" placeholder="Ad Soyad"></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('msa-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="msa-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="msa-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'msa-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('msa-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="msa-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="msa-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'msa-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('msa-modal')">İptal</button><button class="btn btn-p" onclick="saveMSA()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('msa-modal')">İptal</button><button class="btn btn-p" onclick="saveMSA()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- SPC MODAL -->
@@ -1373,24 +1336,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Ölçüm 3</label><input class="fi" id="spc-3" type="number" step="0.01"></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('spc-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="spc-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="spc-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'spc-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('spc-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="spc-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="spc-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'spc-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('spc-modal')">İptal</button><button class="btn btn-p" onclick="saveSPC()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('spc-modal')">İptal</button><button class="btn btn-p" onclick="saveSPC()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- 8D MODAL -->
@@ -1406,24 +1352,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg full"><label class="fl">D3: Acil Önlem</label><input class="fi" id="d-acil" placeholder="Kısa vadeli koruma aksiyonu..."></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('d8-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="d8-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="d8-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'d8-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('d8-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="d8-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="d8-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'d8-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('8d-modal')">İptal</button><button class="btn btn-p" onclick="save8D()">&#10003; Dosya Aç</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('8d-modal')">İptal</button><button class="btn btn-p" onclick="save8D()">&#10003; Dosya Aç</button></div>
 </div></div>
 
 <!-- CAPA MODAL -->
@@ -1440,24 +1369,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Sorumlu</label><input class="fi" id="ca-sor" placeholder="Ad Soyad"></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('capa-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="capa-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="capa-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'capa-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('capa-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="capa-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="capa-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'capa-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('capa-modal')">İptal</button><button class="btn btn-p" onclick="saveCAPA()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('capa-modal')">İptal</button><button class="btn btn-p" onclick="saveCAPA()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- NCK MODAL -->
@@ -1473,24 +1385,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Sorumlu</label><input class="fi" id="n-sor" placeholder="Ad Soyad"></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('nck-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="nck-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="nck-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'nck-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('nck-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="nck-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="nck-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'nck-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('nck-modal')">İptal</button><button class="btn btn-p" onclick="saveNCK()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('nck-modal')">İptal</button><button class="btn btn-p" onclick="saveNCK()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- ŞİKAYET MODAL -->
@@ -1507,24 +1402,7 @@ textarea.fi{resize:vertical;min-height:64px}
     </div>
     <div class="fg"><label class="fl">Şikayet Detayı</label><textarea class="fi" id="s-detay"></textarea></div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('sik-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="sik-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="sik-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'sik-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('sik-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="sik-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="sik-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'sik-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('sikayet-modal')">İptal</button><button class="btn btn-p" onclick="saveSikayet()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('sikayet-modal')">İptal</button><button class="btn btn-p" onclick="saveSikayet()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- TEDARİKÇİ MODAL -->
@@ -1540,24 +1418,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Durum</label><select class="fi" id="t-durum"><option>Onaylı</option><option>Koşullu</option><option>Askıda</option><option>Kara Liste</option></select></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('ted-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="ted-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="ted-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'ted-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('ted-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="ted-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="ted-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'ted-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('ted-modal')">İptal</button><button class="btn btn-p" onclick="saveTed()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('ted-modal')">İptal</button><button class="btn btn-p" onclick="saveTed()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- SATIN ALMA MODAL -->
@@ -1573,24 +1434,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">GKK Sonucu</label><select class="fi" id="sa-gkk"><option>Kabul</option><option>Ret</option><option>Bekliyor</option></select></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('satin-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="satin-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="satin-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'satin-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('satin-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="satin-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="satin-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'satin-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('satin-modal')">İptal</button><button class="btn btn-p" onclick="saveSatin()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('satin-modal')">İptal</button><button class="btn btn-p" onclick="saveSatin()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- DOKÜMAN MODAL -->
@@ -1615,24 +1459,7 @@ textarea.fi{resize:vertical;min-height:64px}
       </div>
       <input type="file" id="doc-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" style="display:none" onchange="handleDocs(this,'doc-file-list')">
     </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('doc-ph-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="doc-ph-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="doc-ph-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'doc-ph-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('doc-ph-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="doc-ph-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="doc-ph-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'doc-ph-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('doc-modal')">İptal</button><button class="btn btn-p" onclick="saveDoc()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('doc-modal')">İptal</button><button class="btn btn-p" onclick="saveDoc()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- EĞİTİM MODAL -->
@@ -1650,24 +1477,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Tamamlama %</label><input class="fi" id="eg-pct" type="number" min="0" max="100" placeholder="100"></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('egitim-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="egitim-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="egitim-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'egitim-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('egitim-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="egitim-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="egitim-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'egitim-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('egitim-modal')">İptal</button><button class="btn btn-p" onclick="saveEgitim()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('egitim-modal')">İptal</button><button class="btn btn-p" onclick="saveEgitim()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- RİSK MODAL -->
@@ -1684,24 +1494,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Sorumlu</label><input class="fi" id="r-sor" placeholder="Ad Soyad"></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('risk-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="risk-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="risk-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'risk-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('risk-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="risk-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="risk-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'risk-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('risk-modal')">İptal</button><button class="btn btn-p" onclick="saveRisk()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('risk-modal')">İptal</button><button class="btn btn-p" onclick="saveRisk()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- DENETİM MODAL -->
@@ -1716,24 +1509,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg full"><label class="fl">Denetim Odak Noktaları</label><textarea class="fi" id="dn-not" placeholder="Kontrol edilecek konular..."></textarea></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('denet-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="denet-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="denet-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'denet-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('denet-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="denet-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="denet-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'denet-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('denetim-modal')">İptal</button><button class="btn btn-p" onclick="saveDenetim()">&#10003; Planla</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('denetim-modal')">İptal</button><button class="btn btn-p" onclick="saveDenetim()">&#10003; Planla</button></div>
 </div></div>
 
 <!-- YGR MODAL -->
@@ -1746,24 +1522,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg full"><label class="fl">Gündem Maddeleri</label><textarea class="fi" id="y-gundem" placeholder="KPI raporu, önceki kararlar, hedefler..."></textarea></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('ygr-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="ygr-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="ygr-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'ygr-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('ygr-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="ygr-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="ygr-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'ygr-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('ygr-modal')">İptal</button><button class="btn btn-p" onclick="saveYGR()">&#10003; Planla</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('ygr-modal')">İptal</button><button class="btn btn-p" onclick="saveYGR()">&#10003; Planla</button></div>
 </div></div>
 
 <!-- 5S MODAL -->
@@ -1781,24 +1540,7 @@ textarea.fi{resize:vertical;min-height:64px}
     </div>
     <div class="fg"><label class="fl">Bulgular / Notlar</label><textarea class="fi" id="s-not"></textarea></div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('s5-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="s5-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="s5-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'s5-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('s5-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="s5-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="s5-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'s5-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('5s-modal')">İptal</button><button class="btn btn-p" onclick="save5S()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('5s-modal')">İptal</button><button class="btn btn-p" onclick="save5S()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- LOT MODAL -->
@@ -1816,24 +1558,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Sevkiyat Tarihi</label><input class="fi" id="l-sevk" type="date"></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('lot-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="lot-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="lot-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'lot-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('lot-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="lot-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="lot-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'lot-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('lot-modal')">İptal</button><button class="btn btn-p" onclick="saveLot()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('lot-modal')">İptal</button><button class="btn btn-p" onclick="saveLot()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- ENERJİ MODAL -->
@@ -1849,24 +1574,7 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Geri Dönüşüm (kg)</label><input class="fi" id="en-geri" type="number" step="0.1" placeholder="60"></div>
     </div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('enerji-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="enerji-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="enerji-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'enerji-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('enerji-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="enerji-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="enerji-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'enerji-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('enerji-modal')">İptal</button><button class="btn btn-p" onclick="saveEnerji()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('enerji-modal')">İptal</button><button class="btn btn-p" onclick="saveEnerji()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- BİLGİ MODAL -->
@@ -1881,24 +1589,7 @@ textarea.fi{resize:vertical;min-height:64px}
     </div>
     <div class="fg"><label class="fl">İçerik / Özet</label><textarea class="fi" id="bi-icerik" placeholder="Bilginin içeriği veya özeti..."></textarea></div>
   </div>
-  
-    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('bilgi-photos').click()" style="cursor:pointer">
-        <div style="font-size:18px">📷</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
-        <div class="photo-preview" id="bilgi-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <input type="file" id="bilgi-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'bilgi-photo-preview')">
-    </div>
-    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
-      <div class="photo-zone" onclick="document.getElementById('bilgi-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
-        <div style="font-size:14px">📎</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
-        <div id="bilgi-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
-      </div>
-      <input type="file" id="bilgi-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'bilgi-doc-list')">
-    </div>
-    <div class="mf"><button class="btn" onclick="closeModal('bilgi-modal')">İptal</button><button class="btn btn-p" onclick="saveBilgi()">&#10003; Kaydet</button></div>
+  <div class="mf"><button class="btn" onclick="closeModal('bilgi-modal')">İptal</button><button class="btn btn-p" onclick="saveBilgi()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- USER MODAL -->
@@ -1918,23 +1609,6 @@ textarea.fi{resize:vertical;min-height:64px}
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── Cloudinary Config ───────────────────────────────────────
-var CLOUDINARY_CLOUD = "dfb9z5efp";
-var CLOUDINARY_PRESET = "novawood_kys";
-
-async function uploadToCloudinary(file) {
-  var fd = new FormData();
-  fd.append('file', file);
-  fd.append('upload_preset', CLOUDINARY_PRESET);
-  fd.append('folder', 'novawood-kys');
-  try {
-    var res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', {method:'POST',body:fd});
-    var d = await res.json();
-    return d.secure_url || null;
-  } catch(e) { console.error('Cloudinary hata:', e); return null; }
-}
-
-
 // ============ DATA ============
 var gkkData=[];
 var prosesData=[];
@@ -2000,77 +1674,57 @@ function handlePhotos(input, previewId) {
   Array.from(input.files).forEach(function(file) {
     var reader = new FileReader();
     reader.onload = function(e) {
-      // 1. Canvas küçült
       var img = new Image();
       img.onload = function() {
-        var W = 800, H = 800, w = img.width, h = img.height;
-        if (w > W) { h = Math.round(h * W / w); w = W; }
-        if (h > H) { w = Math.round(w * H / h); h = H; }
-        var cv = document.createElement('canvas');
-        cv.width = w; cv.height = h;
-        cv.getContext('2d').drawImage(img, 0, 0, w, h);
+        var W=800,H=800,w=img.width,h=img.height;
+        if(w>W){h=Math.round(h*W/w);w=W;}
+        if(h>H){w=Math.round(w*H/h);h=H;}
+        var cv=document.createElement('canvas');
+        cv.width=w;cv.height=h;
+        cv.getContext('2d').drawImage(img,0,0,w,h);
 
-        // 2. Wrap
-        var wrap = document.createElement('div');
-        wrap.style.cssText = 'position:relative;display:inline-block;margin:3px;vertical-align:top';
+        var wrap=document.createElement('div');
+        wrap.style.cssText='position:relative;display:inline-block;margin:3px;vertical-align:top';
 
-        // 3. Thumb
-        var thumb = document.createElement('img');
-        thumb.style.cssText = 'width:72px;height:72px;object-fit:cover;border-radius:6px;cursor:zoom-in;border:2px solid #ccc;display:block';
-        thumb.title = file.name;
-        cv.toBlob(function(blob) {
-          var localUrl = URL.createObjectURL(blob);
-          thumb.src = localUrl;
-          thumb.dataset.localSrc = localUrl;
-          thumb.dataset.cloudUrl = '';
-          thumb.onclick = function() {
-            var src = thumb.dataset.cloudUrl || thumb.dataset.localSrc;
-            openPhotoViewer([{ src: src, name: file.name }], 0);
-          };
+        var thumb=document.createElement('img');
+        thumb.style.cssText='width:72px;height:72px;object-fit:cover;border-radius:6px;cursor:zoom-in;border:2px solid #ccc;display:block';
+        thumb.dataset.cloudUrl='';
+        thumb.onclick=function(){
+          openPhotoViewer([{src:thumb.dataset.cloudUrl||thumb.src,name:file.name}],0);
+        };
 
-          // 4. Spinner
-          var sp = document.createElement('span');
-          sp.style.cssText = 'position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.65);color:#fff;font-size:9px;padding:1px 3px;border-radius:3px;pointer-events:none';
-          sp.textContent = '⏳';
+        var sp=document.createElement('span');
+        sp.style.cssText='position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.65);color:#fff;font-size:9px;padding:1px 3px;border-radius:3px';
+        sp.textContent='⏳';
 
-          // 5. Sil
-          var del = document.createElement('button');
-          del.textContent = '×';
-          del.style.cssText = 'position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:#c00;color:#fff;border:none;cursor:pointer;font-size:13px;line-height:1;padding:0;z-index:3';
-          del.onclick = function(ev) { ev.stopPropagation(); wrap.remove(); };
+        var del=document.createElement('button');
+        del.textContent='×';
+        del.style.cssText='position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:#c00;color:#fff;border:none;cursor:pointer;font-size:13px;line-height:1;padding:0;z-index:3';
+        del.onclick=function(ev){ev.stopPropagation();wrap.remove();};
 
-          wrap.appendChild(thumb);
-          wrap.appendChild(sp);
-          wrap.appendChild(del);
-          prev.appendChild(wrap);
+        wrap.appendChild(thumb);wrap.appendChild(sp);wrap.appendChild(del);
+        prev.appendChild(wrap);
 
-          // 6. Cloudinary upload — saf fetch promise
-          var fd = new FormData();
-          fd.append('file', new File([blob], file.name, { type: 'image/jpeg' }));
-          fd.append('upload_preset', 'novawood_kys');
-          fd.append('folder', 'novawood-kys');
-
-          fetch('https://api.cloudinary.com/v1_1/dfb9z5efp/image/upload', {
-            method: 'POST',
-            body: fd
-          }).then(function(r) {
-            return r.json();
-          }).then(function(data) {
-            if (data && data.secure_url) {
-              thumb.dataset.cloudUrl = data.secure_url;
-              thumb.src = data.secure_url;
-              thumb.style.border = '2px solid #1d9e75';
-              sp.textContent = '✅';
-              setTimeout(function() { if (sp.parentNode) sp.remove(); }, 1500);
-            } else {
-              sp.textContent = '📷';
-            }
-          }).catch(function() {
-            sp.textContent = '📷';
-          });
-        }, 'image/jpeg', 0.8);
+        cv.toBlob(function(blob){
+          thumb.src=URL.createObjectURL(blob);
+          var fd=new FormData();
+          fd.append('file',new File([blob],file.name,{type:'image/jpeg'}));
+          fd.append('upload_preset','novawood_kys');
+          fd.append('folder','novawood-kys');
+          fetch('https://api.cloudinary.com/v1_1/dfb9z5efp/image/upload',{method:'POST',body:fd})
+            .then(function(r){return r.json();})
+            .then(function(d){
+              if(d&&d.secure_url){
+                thumb.dataset.cloudUrl=d.secure_url;
+                thumb.src=d.secure_url;
+                thumb.style.border='2px solid #1d9e75';
+                sp.textContent='✅';
+                setTimeout(function(){if(sp.parentNode)sp.remove();},1500);
+              } else { sp.textContent='📷'; }
+            }).catch(function(){sp.textContent='📷';});
+        },'image/jpeg',0.8);
       };
-      img.src = e.target.result;
+      img.src=e.target.result;
     };
     reader.readAsDataURL(file);
   });
@@ -2127,12 +1781,11 @@ function viewSavedFiles(fileArr,title){
   ov.appendChild(box);ov.onclick=function(e){if(e.target===ov)ov.remove();};document.body.appendChild(ov);
 }
 function collectPhotos(previewId) {
-  var prev = document.getElementById(previewId);
-  if (!prev) return [];
-  return Array.from(prev.querySelectorAll('img')).map(function(img) {
-    // Cloudinary URL varsa onu kullan, yoksa local blob/base64
-    return img.dataset.cloudUrl || img.dataset.localSrc || img.src || null;
-  }).filter(function(v) { return v && v.length > 4; });
+  var prev=document.getElementById(previewId);
+  if(!prev)return[];
+  return Array.from(prev.querySelectorAll('img')).map(function(img){
+    return img.dataset.cloudUrl||img.src||null;
+  }).filter(function(v){return v&&v.length>4&&!v.startsWith('blob:');});
 }
 
 
@@ -2158,131 +1811,1645 @@ function viewGKKFiles(idx){var r=gkkData[idx];if(r&&r.files&&r.files.length)view
 
 
 function renderGKK(){
-  var sv=(document.getElementById('gkk-search')||{value:''}).value.toLowerCase();
+  var s=(document.getElementById('gkk-search')||{value:''}).value.toLowerCase();
   var af=(document.getElementById('gkk-af')||{value:''}).value;
   var kf=(document.getElementById('gkk-kf')||{value:''}).value;
-  var d=gkkData.filter(function(r){
-    return(!sv||((r.a||'')+(r.ted||'')+(r.parti||'')).toLowerCase().includes(sv))
-      &&(!af||r.a===af)&&(!kf||r.k===kf);
-  });
-  var tb=document.getElementById('gkk-tbody');if(!tb)return;
-  tb.innerHTML=d.length?d.map(function(r){
+  var d=gkkData.filter(function(r){return(!s||(r.a+r.ted+r.parti).toLowerCase().includes(s))&&(!af||r.a===af)&&(!kf||r.k===kf);});
+  var tbody=document.getElementById('gkk-tbody');if(!tbody)return;
+  tbody.innerHTML=d.length?d.map(function(r){
     var idx=gkkData.indexOf(r);
-    // Nem
-    var nem=parseFloat(r.nem)||0;
-    var nemOk=r.nemOk;
-    var nc=nemOk===true?'var(--green)':nemOk===false?'var(--red)':'var(--amber)';
-    var nemH=nem>0?('<span style="font-weight:700;color:'+nc+'">'+(nemOk===true?'✓ ':nemOk===false?'✗ ':'')+nem+'%</span>'):'—';
-    // Boyutlar
-    var dims=r.dims||[];
+    var nc=r.nem>0?(r.nem>=4&&r.nem<=8?'var(--green)':r.nem>8.5?'var(--red)':'var(--amber)'):'var(--muted)';
+    var nemStr=r.nem>0?('<span style="font-weight:600;color:'+nc+'">'+(r.nemOk===true?'✓ ':r.nemOk===false?'✗ ':'')+r.nem+'%</span>'):'—';
     var dimH='—';
-    if(dims.length){
-      var dF=dims.filter(function(d){return d&&d.ok===false;}).length;
-      var dO=dims.filter(function(d){return d&&d.ok===true;}).length;
-      var tip=dims.map(function(d){return d?(d.name||'?')+': '+(d.olcum||'—')+'mm':'';}).join(' | ');
-      dimH='<span class="badge '+(dF>0?'br':dO>0?'bg':'bgr')+'" title="'+tip+'" style="cursor:help">'+dims.length+' profil '+(dF>0?'✗':'✓')+'</span>';
-    }
-    // Foto/Dosya — photos veya photoUrls
-    var photos=(r.photos&&r.photos.length)?r.photos:(r.photoUrls||[]);
-    var files=r.files||[];
-    var fBtn=photos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(gkkData['+idx+'].photos||gkkData['+idx+'].photoUrls||[])" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+photos.length+'</button> '):'';
-    var dBtn=files.length?('<button class="btn btn-sm" onclick="viewGKKFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+files.length+'</button> '):'';
-    var noM=!photos.length&&!files.length?'—':'';
-    var delB='<button class="btn btn-sm" onclick="delGKK('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00" title="Sil">🗑</button>';
-    return'<tr>'
-      +'<td>'+(r.t?r.t.split('-').reverse().join('.'):'—')+'</td>'
-      +'<td>'+(r.a||'—')+'</td>'
-      +'<td>'+(r.ted||'—')+'</td>'
-      +'<td>'+(r.parti||'—')+'</td>'
-      +'<td>'+(r.m||'—')+'</td>'
-      +'<td>'+nemH+'</td>'
-      +'<td>'+dimH+'</td>'
-      +'<td>'+badge(r.g||'—')+'</td>'
-      +'<td>'+badge(r.k||'—')+'</td>'
-      +'<td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td>'
-      +'<td>'+delB+'</td>'
-      +'</tr>';
+    if(r.dims&&r.dims.length){var dF=r.dims.filter(function(d){return d.ok===false;}).length;var dO=r.dims.filter(function(d){return d.ok===true;}).length;dimH='<span class="badge '+(dF>0?'br':dO>0?'bg':'bgr')+'">'+r.dims.length+' profil '+(dF>0?'✗':'✓')+'</span>';}
+    var fBtn=r.photos&&r.photos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(gkkData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> '):'';
+    var dBtn=r.files&&r.files.length?('<button class="btn btn-sm" onclick="viewGKKFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> '):'';
+    var noM=(!r.photos||!r.photos.length)&&(!r.files||!r.files.length)?'—':'';
+    var delB='<button class="btn btn-sm" onclick="delGKK('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
+    return'<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.ted+'</td><td>'+r.parti+'</td><td>'+r.m+'</td><td>'+nemStr+'</td><td>'+badge(r.g)+'</td><td>'+dimH+'</td><td>'+badge(r.k)+'</td><td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td><td>'+delB+'</td></tr>';
   }).join(''):'<tr><td colspan="11" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz GKK kaydı yok</td></tr>';
   var cnt=document.getElementById('gkk-count');if(cnt)cnt.textContent=d.length+' kayıt';
 }
-
 function delGKK(idx){if(confirm('Kaydı silmek istiyor musunuz?')){gkkData.splice(idx,1);renderGKK();renderDash();toast('Silindi ✓');}}
 
-function saveGKK() {
-  var tedEl = document.getElementById('g-ted');
-  if (!tedEl || !tedEl.value.trim()) { toast('Tedarikçi adı zorunlu!'); return; }
+function saveGKK(){
+  var tedEl=document.getElementById('g-ted');
+  if(!tedEl||!tedEl.value.trim()){toast('Tedarikçi adı zorunlu!');return;}
 
-  // Nem
-  var n1 = parseFloat((document.getElementById('g-nem1')||{}).value)||null;
-  var n2 = parseFloat((document.getElementById('g-nem2')||{}).value)||null;
-  var n3 = parseFloat((document.getElementById('g-nem3')||{}).value)||null;
-  var nArr = [n1,n2,n3].filter(function(v){return v!==null;});
-  var nemOrt = nArr.length ? Math.round(nArr.reduce(function(a,b){return a+b;},0)/nArr.length*10)/10 : null;
-  var nemMin = parseFloat((document.getElementById('g-nem-min')||{value:'4'}).value)||4;
-  var nemMax = parseFloat((document.getElementById('g-nem-max')||{value:'8'}).value)||8;
-  var nemOk  = nemOrt!==null ? (nemOrt>=nemMin && nemOrt<=nemMax) : null;
-  var ortEl  = document.getElementById('g-nem');
-  if (ortEl && nemOrt!==null) { ortEl.value=nemOrt; }
+  // 3 nem ölçümü
+  var n1=parseFloat((document.getElementById('g-nem1')||{}).value)||null;
+  var n2=parseFloat((document.getElementById('g-nem2')||{}).value)||null;
+  var n3=parseFloat((document.getElementById('g-nem3')||{}).value)||null;
+  var nArr=[n1,n2,n3].filter(function(v){return v!==null;});
+  var nemOrt=nArr.length?Math.round(nArr.reduce(function(a,b){return a+b;},0)/nArr.length*10)/10:null;
+  var nemMin=parseFloat((document.getElementById('g-nem-min')||{value:'4'}).value)||4;
+  var nemMax=parseFloat((document.getElementById('g-nem-max')||{value:'8'}).value)||8;
+  var nemOk=nemOrt!==null?(nemOrt>=nemMin&&nemOrt<=nemMax):null;
+  // ortalama input'a yaz
+  var ortEl=document.getElementById('g-nem');if(ortEl&&nemOrt!==null)ortEl.value=nemOrt;
 
-  // Boyutlar
-  var dims = _collectDimRows('gkk-dim-rows');
+  // boyutsal ölçümler — _collectDimRows kullan
+  var dims=_collectDimRows('gkk-dim-rows');
 
-  // Foto ve dosya
-  var photos = collectPhotos('g-photo-preview');
-  var files  = collectDocs('g-doc-list');
+  var photos=collectPhotos('g-photo-preview');
+  var files=collectDocs('g-doc-list');
 
-  var record = {
-    t:     td0(),
-    a:     document.getElementById('g-agac').value,
-    ted:   tedEl.value.trim(),
-    parti: (document.getElementById('g-parti')||{value:''}).value || '',
-    m:     (document.getElementById('g-miktar')||{value:''}).value || '',
+  gkkData.unshift({
+    t:td0(),
+    a:document.getElementById('g-agac').value,
+    ted:tedEl.value.trim(),
+    parti:(document.getElementById('g-parti')||{value:''}).value||'',
+    m:(document.getElementById('g-miktar')||{value:''}).value||'',
     nem1:n1, nem2:n2, nem3:n3, nem:nemOrt,
     nemMin:nemMin, nemMax:nemMax, nemOk:nemOk,
-    dims:  dims,
-    g:     (document.getElementById('g-gorsel')||{value:'Uygun'}).value,
-    k:     (document.getElementById('g-karar') ||{value:'Kabul'}).value,
-    kayit: (document.getElementById('g-kayit') ||{value:'KM'}).value || 'KM',
-    photos: photos,
-    files:  files,
-    foto:   photos.length,
-    docCount: files.length,
-    not:   (document.getElementById('g-not')||{value:''}).value || ''
-  };
+    dims:dims,
+    g:(document.getElementById('g-gorsel')||{value:'Uygun'}).value,
+    k:(document.getElementById('g-karar')||{value:'Kabul'}).value,
+    kayit:(document.getElementById('g-kayit')||{value:'KM'}).value||'KM',
+    photos:photos, files:files,
+    foto:photos.length, docCount:files.length,
+    not:(document.getElementById('g-not')||{value:''}).value||''
+  });
 
-  gkkData.unshift(record);
-  renderGKK();
-  renderDash();
+  renderGKK();renderDash();
   closeModal('gkk-modal');
   toast('GKK kaydı eklendi ✓');
-
-  // Firebase kaydet
-  if (window.fbSave) {
-    var fbData = Object.assign({}, record);
-    // Cloudinary URL'ler varsa kaydet, local blob URL'leri kaydetme
-    fbData.photos = photos.filter(function(p) {
-      return p && (p.startsWith('http') || (p.startsWith('data:') && p.length < 200000));
-    });
-    fbData.files = files.map(function(f) {
-      if (!f) return null;
-      return { name: f.name || 'dosya', data: (f.data && f.data.length < 700000) ? f.data : null };
-    }).filter(Boolean);
-    window.fbSave('gkk', fbData).then(function(id) {
-      if (id) { record._fbId = id; console.log('GKK Firebase ✅', id); }
-    });
-  }
+  // Firebase'e kaydet
+  if(window.fbSave)fbSave('gkk',gkkData[0]).then(function(id){if(id)gkkData[0]._fbId=id;});
 
   // Temizle
   ['g-ted','g-parti','g-miktar','g-nem1','g-nem2','g-nem3','g-kayit','g-not'].forEach(function(id){
-    var e=document.getElementById(id); if(e){e.value='';e.style.color='';e.style.background='';}
+    var e=document.getElementById(id);if(e)e.value='';
   });
-  var ne=document.getElementById('g-nem'); if(ne){ne.value='';ne.style.color='';ne.style.background='';}
-  var ni=document.getElementById('g-nem-icon'); if(ni)ni.textContent='';
-  var nr=document.getElementById('g-nem-result'); if(nr)nr.style.display='none';
-  var pp=document.getElementById('g-photo-preview'); if(pp)pp.innerHTML='';
-  var dl=document.getElementById('g-doc-list'); if(dl)dl.innerHTML='';
-  var dr=document.getElementById('gkk-dim-rows'); if(dr)dr.innerHTML='';
+  var nemEl=document.getElementById('g-nem');
+  if(nemEl){nemEl.value='';nemEl.style.color='';nemEl.style.background='';}
+  var ni=document.getElementById('g-nem-icon');if(ni)ni.textContent='';
+  var nr=document.getElementById('g-nem-result');if(nr)nr.style.display='none';
+  var pp=document.getElementById('g-photo-preview');if(pp)pp.innerHTML='';
+  var dl=document.getElementById('g-doc-list');if(dl)dl.innerHTML='';
+  var dr=document.getElementById('gkk-dim-rows');if(dr)dr.innerHTML='';
+  _dimId=0;
+}
+
+
+function renderDash(){
+  // GKK Kabul Oranı
+  var gTot=gkkData.length,gOk=gkkData.filter(function(r){return r.k==='Kabul';}).length;
+  var gOran=gTot>0?Math.round(gOk/gTot*100):null;
+  var el=document.getElementById('dash-gkk-oran');
+  if(el){el.textContent=gOran!==null?(gOran+'%'):'—';el.style.color=gOran>=92?'var(--green)':'var(--amber)';}
+
+  // Açık 8D+CAPA
+  var o8d=data8d.filter(function(r){return r.du!=='Kapandı';}).length;
+  var oCapa=capaData.filter(function(r){return r.du!=='Tamamlandı';}).length;
+  var el2=document.getElementById('dash-open-8d');
+  if(el2){el2.textContent=o8d+oCapa;el2.style.color=(o8d+oCapa)>0?'var(--red)':'var(--green)';}
+
+  // Kalibrasyon vade
+  var vade=kalibData.filter(function(r){return r.du==='Vade Yakın';}).length;
+  var el3=document.getElementById('dash-kalib');
+  if(el3){el3.textContent=vade;el3.style.color=vade>0?'var(--amber)':'var(--green)';}
+
+  // 5S
+  var s5=data5s.length?Math.round(data5s.reduce(function(a,b){return a+b.s.reduce(function(x,y){return x+y;},0);},0)/data5s.length):null;
+  var el4=document.getElementById('dash-5s');
+  if(el4){el4.textContent=s5!==null?s5:'—';el4.style.color=s5>=75?'var(--green)':'var(--amber)';}
+
+  // Final uygunluk
+  var fTot=finalData.length,fOk=finalData.filter(function(r){return r.k==='Sevkiyat';}).length;
+  var fOran=fTot>0?Math.round(fOk/fTot*100):null;
+  var el5=document.getElementById('dash-final');
+  if(el5){el5.textContent=fOran!==null?(fOran+'%'):'—';el5.style.color=fOran>=95?'var(--green)':'var(--amber)';}
+
+  // Risk yüksek
+  var rYuk=riskData.filter(function(r){return(r.olas*r.etki)>=15;}).length;
+  var el6=document.getElementById('dash-risk');
+  if(el6){el6.textContent=rYuk;el6.style.color=rYuk>0?'var(--amber)':'var(--green)';}
+
+  // Eğitim
+  var eTot=egitimData.length,eOk=egitimData.filter(function(r){return r.du==='Tamamlandı';}).length;
+  var eOran=eTot>0?Math.round(eOk/eTot*100):null;
+  var el7=document.getElementById('dash-egitim');
+  if(el7){el7.textContent=eOran!==null?(eOran+'%'):'—';el7.style.color=eOran>=85?'var(--green)':'var(--amber)';}
+
+  // Müşteri şikayet
+  var acikSik=sikayetData.filter(function(r){return r.du!=='Kapandı';}).length;
+  var el8=document.getElementById('dash-sikayet');
+  if(el8){el8.textContent=sikayetData.length?acikSik:'—';el8.style.color=acikSik<=3?'var(--green)':'var(--red)';}
+
+  // Nem tablosu — proses verilerinden
+  var nemKayit=prosesData.filter(function(r){return r.p==='Nem Kontrolü';}).slice(0,6);
+  var nemEl=document.getElementById('dash-nem');
+  if(nemEl){
+    nemEl.innerHTML=nemKayit.length?nemKayit.map(function(r){
+      var nem=parseFloat(r.ort||r.nem)||0;
+      var col=nem>=4&&nem<=8?'var(--green)':nem>8.5?'var(--red)':'var(--amber)';
+      return'<tr><td>'+r.a+'</td><td>'+( r.parti||'—')+'</td><td style="font-weight:600;color:'+col+'">'+nem+'%</td><td>'+badge(r.sonuc||'—')+'</td></tr>';
+    }).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:12px;font-size:11px">Proses nem kaydı yok</td></tr>';
+  }
+
+  // Son aktiviteler
+  var son=gkkData.slice(0,3).map(function(r){return{t:r.t,k:(r.a||'')+'–'+(r.ted||''),tur:'GKK',du:r.k};})
+    .concat(data8d.slice(0,3).map(function(r){return{t:r.t,k:(r.prob||'').slice(0,28)+'…',tur:'8D',du:r.du};}));
+  var sonEl=document.getElementById('dash-mixed');
+  if(sonEl){
+    sonEl.innerHTML=son.length?son.slice(0,5).map(function(r){
+      return'<tr><td>'+fd(r.t)+'</td><td style="font-size:11px">'+r.k+'</td><td><span class="badge bb" style="font-size:9px">'+r.tur+'</span></td><td>'+badge(r.du)+'</td></tr>';
+    }).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:12px;font-size:11px">Kayıt yok</td></tr>';
+  }
+
+  // Görevler tablosu
+  var gorevEl=document.getElementById('dash-gorevler');
+  if(gorevEl){
+    var gorevler=[];
+    kalibData.filter(function(r){return r.du==='Vade Yakın';}).forEach(function(r){gorevler.push({k:r.ad+' — kalibrasyon yenileme',tur:'Kalibrasyon',tar:fd(r.sonraki),on:'Acil'});});
+    data8d.filter(function(r){return r.du!=='Kapandı';}).slice(0,3).forEach(function(r){gorevler.push({k:r.no+' kök neden analizi',tur:'8D',tar:'—',on:'Yüksek'});});
+    gorevEl.innerHTML=gorevler.length?gorevler.map(function(g){return'<tr><td style="font-size:11px">'+g.k+'</td><td><span class="iso" style="font-size:9px">'+g.tur+'</span></td><td style="font-size:11px">'+g.tar+'</td><td>'+badge(g.on)+'</td></tr>';}).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:14px;font-size:11px">Görev yok — veriler girdikçe buraya yansır</td></tr>';
+  }
+}
+
+function renderGKK(){
+  var s=(document.getElementById('gkk-search')||{value:''}).value.toLowerCase();
+  var af=(document.getElementById('gkk-af')||{value:''}).value;
+  var kf=(document.getElementById('gkk-kf')||{value:''}).value;
+  var d=gkkData.filter(function(r){return(!s||(r.a+r.ted+r.parti).toLowerCase().includes(s))&&(!af||r.a===af)&&(!kf||r.k===kf);});
+  var tbody=document.getElementById('gkk-tbody');if(!tbody)return;
+  tbody.innerHTML=d.map(function(r){return'<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.ted+'</td><td>'+r.parti+'</td><td>'+r.m+'</td><td style="font-weight:600;color:'+(r.nem>=4&&r.nem<=8?'var(--green)':r.nem>8.5?'var(--red)':'var(--amber)')+'">'+r.nem+'</td><td>'+badge(r.g)+'</td><td>'+badge(r.b)+'</td><td>'+badge(r.k)+'</td><td style="color:var(--muted)">'+(r.foto>0?'&#128247;'+r.foto:'—')+'</td><td style="color:var(--muted);font-size:11px">'+r.not+'</td></tr>';}).join('');
+  var cnt=document.getElementById('gkk-count');if(cnt)cnt.textContent=d.length+' kayıt';
+}
+function saveGKK(){
+  if(!document.getElementById('g-ted').value){toast('Tedarikçi zorunlu!');return;}
+  gkkData.unshift({t:td0(),a:document.getElementById('g-agac').value,ted:document.getElementById('g-ted').value,parti:document.getElementById('g-parti').value||'—',m:document.getElementById('g-miktar').value||'—',nem:parseFloat(document.getElementById('g-nem').value)||0,g:document.getElementById('g-gorsel').value,b:document.getElementById('g-boyut').value,k:document.getElementById('g-karar').value,kayit:document.getElementById('g-kayit').value||'KM',foto:document.getElementById('g-photo-preview').children.length,not:document.getElementById('g-not').value});
+  renderGKK();renderDash();closeModal('gkk-modal');toast('GKK kaydı eklendi.');
+  clr(['g-ted','g-parti','g-miktar','g-nem','g-kayit','g-not']);
+  document.getElementById('g-photo-preview').innerHTML='';
+}
+
+
+
+
+function renderBurn(){
+  var tbody=document.getElementById('burn-tbody');if(!tbody)return;
+  tbody.innerHTML=burnData.map(function(r){return'<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.parti+'</td><td>'+r.renk+'</td><td>'+badge(r.ruyg)+'</td><td>'+badge(r.yuz)+'</td><td style="font-weight:600;color:'+(r.nem>=4&&r.nem<=8?'var(--green)':'var(--red)')+'">'+r.nem+'%</td><td>'+badge(r.ruyg==='Uygun'?'Kabul':'Ret')+'</td><td style="color:var(--muted)">'+(r.foto>0?'&#128247;'+r.foto:'—')+'</td></tr>';}).join('');
+  var tot=burnData.length,uyg=burnData.filter(function(r){return r.ruyg==='Uygun';}).length;
+  document.getElementById('burn-kpi').innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="background:var(--bg);border-radius:7px;padding:10px"><div style="font-size:10px;color:var(--muted)">Renk Uygunluk</div><div style="font-size:20px;font-weight:600;color:var(--green)">'+Math.round(uyg/tot*100)+'%</div></div><div style="background:var(--bg);border-radius:7px;padding:10px"><div style="font-size:10px;color:var(--muted)">Toplam BB Kayıt</div><div style="font-size:20px;font-weight:600">'+tot+'</div></div><div style="background:var(--bg);border-radius:7px;padding:10px"><div style="font-size:10px;color:var(--muted)">Ort. BB Nemi</div><div style="font-size:20px;font-weight:600;color:var(--green)">'+(burnData.reduce(function(a,b){return a+b.nem;},0)/tot).toFixed(1)+'%</div></div><div style="background:var(--bg);border-radius:7px;padding:10px"><div style="font-size:10px;color:var(--muted)">Homojen Yüzey</div><div style="font-size:20px;font-weight:600;color:var(--green)">'+Math.round(burnData.filter(function(r){return r.yuz==='Homojen';}).length/tot*100)+'%</div></div></div>';
+}
+function saveBurn(){
+  burnData.unshift({t:td0(),a:document.getElementById('b-agac').value,parti:document.getElementById('b-parti').value||'BB-'+Date.now(),renk:document.getElementById('b-renk').value,ruyg:document.getElementById('b-ruyg').value,yuz:document.getElementById('b-yuz').value,nem:parseFloat(document.getElementById('b-nem').value)||0,foto:document.getElementById('b-photo-preview').children.length});
+  renderBurn();closeModal('burn-modal');toast('Burn Block kaydı eklendi.');
+  if(window.fbSave)fbSave('burn',burnData[0]).then(function(id){if(id)burnData[0]._fbId=id;});
+  clr(['b-parti','b-nem','b-not']);
+  document.getElementById('b-photo-preview').innerHTML='';
+}
+
+function renderKalib(){
+  // Önce tüm kayıtların durumunu güncelle
+  var bugun = new Date(); bugun.setHours(0,0,0,0);
+  kalibData.forEach(function(r){
+    if(!r.sonraki){r.du='Uygun';return;}
+    var snrDate = new Date(r.sonraki); snrDate.setHours(0,0,0,0);
+    var kalanGun = Math.ceil((snrDate-bugun)/(1000*60*60*24));
+    r._kalanGun = kalanGun;
+    var uyari = r.uyariGun||30;
+    if(kalanGun<0)        r.du='Vadesi Geçti';
+    else if(kalanGun<=uyari) r.du='Vade Yakın';
+    else                   r.du='Uygun';
+  });
+
+  var tbody=document.getElementById('kalib-tbody');if(!tbody)return;
+  tbody.innerHTML=kalibData.length?kalibData.map(function(r,idx){
+    // Renk
+    var duCol = r.du==='Vadesi Geçti'?'var(--red)':r.du==='Vade Yakın'?'var(--amber)':'var(--green)';
+    // Kalan gün etiketi
+    var kalanH='';
+    if(r._kalanGun!==undefined){
+      if(r._kalanGun<0)       kalanH='<span style="color:var(--red);font-size:10px;font-weight:700"> ('+Math.abs(r._kalanGun)+' gün geçti!)</span>';
+      else if(r._kalanGun===0) kalanH='<span style="color:var(--red);font-size:10px;font-weight:700"> (BUGÜN!)</span>';
+      else                     kalanH='<span style="color:var(--muted);font-size:10px"> ('+r._kalanGun+' gün)</span>';
+    }
+    // Foto / Dosya butonları
+    var fBtn=r.photos&&r.photos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(kalibData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> '):'';
+    var dBtn=r.files&&r.files.length?('<button class="btn btn-sm" onclick="viewKalibFiles('+idx+')" style="font-size:10px;padding:2px 7px">📎'+r.files.length+'</button> '):'';
+    var delB='<button class="btn btn-sm" onclick="delKalib('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
+    return'<tr>'
+      +'<td style="font-weight:600;color:var(--green)">'+r.no+'</td>'
+      +'<td>'+r.ad+'</td>'
+      +'<td style="font-size:11px;color:var(--muted)">'+r.konum+'</td>'
+      +'<td>'+fd(r.son)+'</td>'
+      +'<td><span style="font-weight:600;color:'+duCol+'">'+fd(r.sonraki)+'</span>'+kalanH+'</td>'
+      +'<td style="font-size:11px">'+r.periyot+'</td>'
+      +'<td style="font-size:11px">'+r.kurum+'</td>'
+      +'<td style="font-size:10px;color:var(--muted)">'+( r.sertno||'—')+'</td>'
+      +'<td>'+badge(r.du)+'</td>'
+      +'<td style="white-space:nowrap">'+fBtn+dBtn+'</td>'
+      +'<td style="white-space:nowrap">'
+        +'<button class="btn btn-sm btn-p" data-no="'+r.no+'" onclick="yenilenKalib(this.dataset.no)" style="font-size:10px;padding:2px 7px">🔄 Yenile</button> '
+        +delB
+      +'</td>'
+      +'</tr>';
+  }).join(''):'<tr><td colspan="11" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz kalibrasyon kaydı yok</td></tr>';
+
+  // Sidebar uyarı sayacı
+  checkKalibUyari();
+}
+function delKalib(idx){if(confirm('Kalibrasyon kaydı silinsin mi?')){var __r=kalibData[idx];if(__r&&__r._fbId&&window.fbDelete)fbDelete('kalib',__r._fbId);
+  kalibData.splice(idx,1);renderKalib();toast('Silindi ✓');}}
+function viewKalibFiles(idx){var r=kalibData[idx];if(r&&r.files&&r.files.length)viewSavedFiles(r.files,r.ad+' Belgeler');else toast('Belge yok');}
+
+function yenilenKalib(no){
+  var r=kalibData.find(function(x){return x.no===no;});
+  if(!r)return;
+  r.son=td0();
+  var ay=parseInt(r.periyot)||12;
+  r.sonraki=new Date(new Date().setMonth(new Date().getMonth()+ay)).toISOString().slice(0,10);
+  r.du='Uygun';
+  renderKalib();
+  toast(no+' kalibrasyonu yenilendi ✓');
+}
+
+function saveKalib(){
+  if(!document.getElementById('k-no').value){toast('Cihaz No zorunlu!');return;}
+  var son    = document.getElementById('k-son').value;
+  var ay     = parseInt(document.getElementById('k-periyot').value)||12;
+  var uyari  = parseInt(document.getElementById('k-uyari').value)||30;
+  var snr    = son ? new Date(new Date(son).setMonth(new Date(son).getMonth()+ay)).toISOString().slice(0,10) : null;
+  var photos = collectPhotos('k-photo-preview');
+  var files  = collectDocs('k-doc-list');
+  // Durum hesapla
+  var du = 'Uygun';
+  if(snr){
+    var kalanGun = Math.ceil((new Date(snr)-new Date())/(1000*60*60*24));
+    if(kalanGun<0) du='Vadesi Geçti';
+    else if(kalanGun<=uyari) du='Vade Yakın';
+  }
+  kalibData.push({
+    no:     document.getElementById('k-no').value,
+    ad:     document.getElementById('k-ad').value||'—',
+    konum:  document.getElementById('k-konum').value||'—',
+    son:    son||null,
+    sonraki:snr,
+    periyot:ay+' ay',
+    uyariGun:uyari,
+    kurum:  document.getElementById('k-kurum').value||'—',
+    sertno: document.getElementById('k-sertno').value||'',
+    du:     du,
+    photos: photos,
+    files:  files,
+    not:    document.getElementById('k-not').value||''
+  });
+  renderKalib();
+  closeModal('kalib-modal');
+  toast('Kalibrasyon kaydı eklendi ✓');
+  if(window.fbSave)fbSave('kalib',kalibData[kalibData.length-1]).then(function(id){if(id)kalibData[kalibData.length-1]._fbId=id;});
+  ['k-no','k-ad','k-konum','k-son','k-kurum','k-sertno','k-not'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  var kp=document.getElementById('k-periyot');if(kp)kp.value='12';
+  var ku=document.getElementById('k-uyari');if(ku)ku.value='30';
+  var pp=document.getElementById('k-photo-preview');if(pp)pp.innerHTML='';
+  var dl=document.getElementById('k-doc-list');if(dl)dl.innerHTML='';
+}
+
+function renderMSA(){
+  var tbody=document.getElementById('msa-tbody');if(!tbody)return;
+  tbody.innerHTML=msaData.map(function(r){var c=r.rr<10?'var(--green)':r.rr<30?'var(--amber)':'var(--red)';return'<tr><td>'+fd(r.t)+'</td><td>'+r.c+'</td><td>'+r.kar+'</td><td>'+r.tur+'</td><td style="font-weight:600;color:'+c+'">%'+r.rr+'</td><td style="text-align:center">'+r.ndc+'</td><td style="text-align:center">'+r.op+'</td><td>'+badge(r.karar)+'</td><td>'+r.sor+'</td></tr>';}).join('');
+}
+function saveMSA(){
+  if(!document.getElementById('m-cihaz').value){toast('Cihaz adı zorunlu!');return;}
+  var rr=parseFloat(document.getElementById('m-rr').value)||0;
+  msaData.unshift({t:td0(),c:document.getElementById('m-cihaz').value,kar:document.getElementById('m-kar').value||'—',tur:document.getElementById('m-tur').value,op:parseInt(document.getElementById('m-op').value)||3,rr:rr,ndc:parseInt(document.getElementById('m-ndc').value)||0,karar:rr<10?'Yeterli':rr<30?'Sınırda':'Yetersiz',sor:document.getElementById('m-sor').value||'KM'});
+  renderMSA();closeModal('msa-modal');toast('MSA çalışması kaydedildi.');
+  if(window.fbSave)fbSave('msa',msaData[0]).then(function(id){if(id)msaData[0]._fbId=id;});
+  clr(['m-cihaz','m-kar','m-rr','m-ndc','m-op','m-sor']);
+}
+
+function renderSPC(){
+  var tbody=document.getElementById('spc-tbody');if(!tbody)return;
+  tbody.innerHTML=spcData.map(function(r){return'<tr><td>'+fd(r.t)+'</td><td>'+r.kar+'</td><td>'+r.o1+'</td><td>'+r.o2+'</td><td>'+r.o3+'</td><td style="font-weight:600">'+r.ort+'</td><td>'+badge(r.du)+'</td><td>'+r.op+'</td></tr>';}).join('');
+}
+function saveSPC(){
+  var o1=parseFloat(document.getElementById('spc-1').value)||0;
+  var o2=parseFloat(document.getElementById('spc-2').value)||0;
+  var o3=parseFloat(document.getElementById('spc-3').value)||0;
+  var ort=Math.round((o1+o2+o3)/3*100)/100;
+  spcData.unshift({t:td0(),kar:document.getElementById('spc-kar').value,o1:o1,o2:o2,o3:o3,ort:ort,du:'Normal',op:document.getElementById('spc-op').value||'KM'});
+  renderSPC();closeModal('spc-modal');toast('SPC verisi kaydedildi.');
+  if(window.fbSave)fbSave('spc',spcData[0]).then(function(id){if(id)spcData[0]._fbId=id;});
+  clr(['spc-1','spc-2','spc-3','spc-op']);
+}
+
+function render8D(){
+  var sf=(document.getElementById('d-sf')||{value:''}).value;
+  var s=(document.getElementById('d-search')||{value:''}).value.toLowerCase();
+  var d=data8d.filter(function(r){return(!sf||r.du===sf)&&(!s||(r.prob+r.a+r.sor).toLowerCase().includes(s));});
+  var tbody=document.getElementById('8d-tbody');if(!tbody)return;
+  tbody.innerHTML=d.map(function(r){return'<tr><td style="font-weight:700;color:var(--green)">'+r.no+'</td><td>'+fd(r.t)+'</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+r.prob+'">'+r.prob+'</td><td>'+r.a+'</td><td>'+r.p+'</td><td>'+badge(r.on)+'</td><td style="font-size:11px;color:var(--muted)">'+r.acil+'</td><td>'+r.sor+'</td><td>'+badge(r.du)+'</td><td><button class="btn btn-sm '+(r.du==='Kapandı'?'':'btn-p')+'" onclick="'+(r.du==='Kapandı'?'toast(\''+r.no+' zaten kapalı\')':'kapat8D(\''+r.no+'\')')+'">'+( r.du==='Kapandı'?'Kapalı':'Kapat')+'</button></td></tr>';}).join('');
+}
+function save8D(){
+  if(!document.getElementById('d-prob').value){toast('Problem tanımı zorunlu!');return;}
+  data8d.unshift({no:'8D-0'+nextId8d++,t:td0(),prob:document.getElementById('d-prob').value,a:document.getElementById('d-agac').value,p:document.getElementById('d-proses').value,on:document.getElementById('d-oncelik').value,sor:document.getElementById('d-sor').value||'KM',acil:document.getElementById('d-acil').value,du:'Açıldı'});
+  render8D();renderDash();closeModal('8d-modal');toast('8D dosyası açıldı.');
+  if(window.fbSave)fbSave('8d',data8d[0]).then(function(id){if(id)data8d[0]._fbId=id;});
+  clr(['d-prob','d-sor','d-acil']);
+}
+function kapat8D(no){var r=data8d.find(function(x){return x.no===no;});if(r){r.du='Kapandı';render8D();renderDash();toast(no+' kapatıldı.');}}
+
+function renderCAPA(){
+  var tf=(document.getElementById('capa-tf')||{value:''}).value;
+  var d=tf?capaData.filter(function(r){return r.tip===tf;}):capaData;
+  var tbody=document.getElementById('capa-tbody');if(!tbody)return;
+  tbody.innerHTML=d.map(function(r){return'<tr><td style="font-weight:700;color:var(--green)">'+r.no+'</td><td>'+fd(r.t)+'</td><td>'+badge(r.tip)+'</td><td>'+r.prob+'</td><td style="font-size:11px;color:var(--muted)">'+r.kok+'</td><td style="font-size:11px">'+r.faal+'</td><td>'+fd(r.son)+'</td><td>'+r.sor+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
+}
+function saveCAPA(){
+  if(!document.getElementById('ca-prob').value){toast('Uygunsuzluk tanımı zorunlu!');return;}
+  capaData.unshift({no:'CAPA-0'+nextCapa++,t:td0(),tip:document.getElementById('ca-tip').value,kaynak:document.getElementById('ca-kaynak').value,prob:document.getElementById('ca-prob').value,kok:document.getElementById('ca-kok').value||'—',faal:document.getElementById('ca-faal').value||'—',son:document.getElementById('ca-son').value||'—',sor:document.getElementById('ca-sor').value||'KM',du:'Açık'});
+  renderCAPA();closeModal('capa-modal');toast('CAPA kaydı açıldı.');
+  if(window.fbSave)fbSave('capa',capaData[0]).then(function(id){if(id)capaData[0]._fbId=id;});
+  clr(['ca-prob','ca-kok','ca-faal','ca-son','ca-sor']);
+}
+
+function renderNCK(){
+  var tbody=document.getElementById('nck-tbody');if(!tbody)return;
+  tbody.innerHTML=nckData.map(function(r){return'<tr><td style="font-weight:700;color:var(--red)">'+r.no+'</td><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.parti+'</td><td>'+r.uyg+'</td><td>'+badge(r.kar==='Evet'?'Uygun':'Ret')+'</td><td>'+badge(r.karar)+'</td><td>'+r.sor+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
+}
+function saveNCK(){
+  if(!document.getElementById('n-uyg').value){toast('Uygunsuzluk tanımı zorunlu!');return;}
+  nckData.unshift({no:'NCR-0'+nextNCR++,t:td0(),a:document.getElementById('n-agac').value,parti:document.getElementById('n-parti').value||'—',uyg:document.getElementById('n-uyg').value,kar:document.getElementById('n-kar').value,karar:document.getElementById('n-karar').value,sor:document.getElementById('n-sor').value||'KM',du:'Açık'});
+  renderNCK();closeModal('nck-modal');toast('NCR kaydı oluşturuldu.');
+  if(window.fbSave)fbSave('nck',nckData[0]).then(function(id){if(id)nckData[0]._fbId=id;});
+  clr(['n-parti','n-uyg','n-sor']);
+}
+
+function renderSikayet(){
+  var tb=document.getElementById('sikayet-tbody');if(!tb)return;
+  tb.innerHTML=sikayetData.length?sikayetData.map(function(r,idx){
+    var fBtn=r.photos&&r.photos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(sikayetData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> '):'';
+    var delB='<button class="btn btn-sm" onclick="delSikayet('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
+    return'<tr><td style="font-weight:700;color:var(--amber)">'+r.no+'</td>'
+      +'<td>'+fd(r.t)+'</td><td>'+(r.musteri||'—')+'</td><td>'+(r.konu||'—')+'</td>'
+      +'<td>'+badge(r.on||'—')+'</td><td style="color:var(--green)">'+(r.d8||'—')+'</td>'
+      +'<td>'+fd(r.son)+'</td><td>'+badge(r.du||'—')+'</td>'
+      +'<td style="white-space:nowrap">'+fBtn+delB+'</td></tr>';
+  }).join(''):'<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz şikayet kaydı yok</td></tr>';
+}
+function delSikayet(idx){if(confirm('Silinsin mi?')){var r=sikayetData[idx];if(r&&r._fbId&&window.fbDelete)fbDelete('sikayet',r._fbId);sikayetData.splice(idx,1);renderSikayet();toast('Silindi ✓');}}
+
+
+function saveSikayet(){
+  if(!document.getElementById('s-musteri').value){toast('Müşteri adı zorunlu!');
+  if(window.fbSave)fbSave('sikayet',sikayetData[0]).then(function(id){if(id)sikayetData[0]._fbId=id;});
+  return;
+}
+  var d8Sec=document.getElementById('s-8d').value;
+  var d8ref='—';
+  if(d8Sec==='Evet'){data8d.unshift({no:'8D-0'+nextId8d++,t:td0(),prob:document.getElementById('s-konu').value,a:document.getElementById('s-urun').value||'—',p:'Final Kontrol',on:document.getElementById('s-oncelik').value,sor:'KM',acil:'Müşteri şikayeti - acil önlem',du:'Açıldı'});d8ref='8D-0'+(nextId8d-1);}
+  sikayetData.unshift({no:'ŞKT-0'+nextSKT++,t:td0(),musteri:document.getElementById('s-musteri').value,konu:document.getElementById('s-konu').value,urun:document.getElementById('s-urun').value||'—',on:document.getElementById('s-oncelik').value,d8:d8ref,son:document.getElementById('s-son').value||'—',du:'Açık'});
+  renderSikayet();render8D();closeModal('sikayet-modal');toast('Şikayet kaydı açıldı.'+(d8Sec==='Evet'?' 8D de açıldı.':''));
+  clr(['s-musteri','s-konu','s-urun','s-son','s-detay']);
+}
+
+function renderTed(){
+  var tbody=document.getElementById('ted-tbody');if(!tbody)return;
+  tbody.innerHTML=tedData.map(function(r){var gs=r.genel;var gc=gs>=80?'var(--green)':gs>=60?'var(--amber)':'var(--red)';return'<tr><td style="font-weight:600">'+r.ad+'</td><td>'+r.mal+'</td><td>'+r.ulke+'</td><td style="text-align:center;font-weight:600;color:'+(r.kskor>=80?'var(--green)':'var(--amber)')+'">'+r.kskor+'</td><td style="text-align:center;font-weight:600;color:'+(r.tskor>=80?'var(--green)':'var(--amber)')+'">'+r.tskor+'</td><td style="text-align:center;font-weight:700;color:'+gc+'">'+r.genel+'</td><td>'+fd(r.valDate)+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
+}
+function saveTed(){
+  if(!document.getElementById('t-ad').value){toast('Tedarikçi adı zorunlu!');return;}
+  var ks=parseInt(document.getElementById('t-kskor').value)||0;
+  var ts=parseInt(document.getElementById('t-tskor').value)||0;
+  tedData.push({ad:document.getElementById('t-ad').value,mal:document.getElementById('t-mal').value||'—',ulke:document.getElementById('t-ulke').value||'—',kskor:ks,tskor:ts,genel:Math.round((ks+ts)/2),valDate:td0(),du:document.getElementById('t-durum').value});
+  renderTed();closeModal('ted-modal');toast('Tedarikçi eklendi.');
+  if(window.fbSave)fbSave('ted',tedData[0]).then(function(id){if(id)tedData[0]._fbId=id;});
+  clr(['t-ad','t-mal','t-ulke','t-kskor','t-tskor']);
+}
+
+function renderSatin(){
+  var tbody=document.getElementById('satin-tbody');if(!tbody)return;
+  tbody.innerHTML=satinData.map(function(r){return'<tr><td>'+fd(r.t)+'</td><td>'+r.mal+'</td><td>'+r.ted+'</td><td>'+r.miktar+'</td><td>'+badge(r.ts)+'</td><td>'+badge(r.coa==='Evet'?'Uygun':r.coa==='Hayır'?'Ret':'Sınırda')+'</td><td>'+badge(r.gkk)+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
+}
+function saveSatin(){
+  if(!document.getElementById('sa-mal').value){toast('Malzeme adı zorunlu!');return;}
+  satinData.unshift({t:td0(),mal:document.getElementById('sa-mal').value,ted:document.getElementById('sa-ted').value||'—',miktar:document.getElementById('sa-miktar').value||'—',ts:document.getElementById('sa-ts').value,coa:document.getElementById('sa-coa').value,gkk:document.getElementById('sa-gkk').value,du:'Devam'});
+  renderSatin();closeModal('satin-modal');toast('Satın alma kaydı eklendi.');
+  if(window.fbSave)fbSave('satin',satinData[0]).then(function(id){if(id)satinData[0]._fbId=id;});
+  clr(['sa-mal','sa-ted','sa-miktar']);
+}
+
+function renderDocs(){
+  var ft=document.getElementById('doc-tf');var ftv=ft?ft.value:'';
+  var d=ftv?docData.filter(function(r){return r.tur===ftv;}):docData;
+  var tb=document.getElementById('docs-tbody');if(!tb)return;
+  tb.innerHTML=d.length?d.map(function(r){
+    var idx=docData.indexOf(r);
+    var fBtn=r.files&&r.files.length
+      ?('<button class="btn btn-sm" onclick="viewDocFiles('+idx+')" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📎 '+r.files.length+'</button>')
+      :'<span style="color:var(--muted);font-size:10px">—</span>';
+    var delB='<button class="btn btn-sm" onclick="delDoc('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
+    return'<tr>'
+      +'<td style="font-weight:700;color:var(--green)">'+r.no+'</td>'
+      +'<td>'+r.baslik+'</td>'
+      +'<td><span class="badge bgr">'+r.tur+'</span></td>'
+      +'<td style="color:var(--muted)">'+r.rev+'</td>'
+      +'<td><span class="iso">Md.'+r.madde+'</span></td>'
+      +'<td>'+r.sor+'</td>'
+      +'<td>'+badge(r.du)+'</td>'
+      +'<td style="font-size:11px;color:var(--muted)">'+fd(r.gecerli)+'</td>'
+      +'<td style="white-space:nowrap;display:flex;gap:4px">'+fBtn+' '+delB+'</td>'
+      +'</tr>';
+  }).join(''):'<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz doküman yok</td></tr>';
+}
+function delDoc(idx){if(confirm('Bu dokümanı silmek istiyor musunuz?')){var __r=docData[idx];if(__r&&__r._fbId&&window.fbDelete)fbDelete('dok',__r._fbId);
+  docData.splice(idx,1);renderDocs();toast('Silindi ✓');}}
+
+function saveDoc(){
+  if(!document.getElementById('doc-no').value||!document.getElementById('doc-baslik').value){toast('No ve başlık zorunlu!');return;}
+  var files=collectDocs('doc-file-list');
+  docData.unshift({no:document.getElementById('doc-no').value,baslik:document.getElementById('doc-baslik').value,tur:document.getElementById('doc-tur').value,rev:document.getElementById('doc-rev').value||'Rev.01',madde:document.getElementById('doc-madde').value,sor:document.getElementById('doc-sor').value||'KM',du:'Taslak',files:files,gecerli:document.getElementById('doc-gecerli').value||'—'});
+  renderDocs();closeModal('doc-modal');toast('Doküman eklendi.');
+  if(window.fbSave)fbSave('dok',docData[0]).then(function(id){if(id)docData[0]._fbId=id;});
+  clr(['doc-no','doc-baslik','doc-sor','doc-gecerli']);
+}
+
+function renderEgitim(){
+  var df=(document.getElementById('eg-df')||{value:''}).value;
+  var d=df?egitimData.filter(function(r){return r.dept===df;}):egitimData;
+  var tbody=document.getElementById('egitim-tbody');if(!tbody)return;
+  tbody.innerHTML=d.map(function(r){var c=r.pct===100?'var(--green)':r.pct>50?'var(--blue)':r.pct>0?'var(--amber)':'#ddd';return'<tr><td style="font-weight:600">'+r.ad+'</td><td>'+r.dept+'</td><td>'+r.poz+'</td><td>'+r.egitim+'</td><td>'+fd(r.tarih)+'</td><td style="text-align:center">'+r.sure+'</td><td style="text-align:center;font-weight:600">'+(r.puan||'—')+'</td><td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:'+r.pct+'%;background:'+c+'"></div></div><span style="font-size:11px;min-width:28px">'+r.pct+'%</span></div></td><td>'+badge(r.du)+'</td></tr>';}).join('');
+}
+function saveEgitim(){
+  if(!document.getElementById('eg-ad').value){toast('Personel adı zorunlu!');return;}
+  var pct=parseInt(document.getElementById('eg-pct').value)||0;
+  egitimData.unshift({ad:document.getElementById('eg-ad').value,dept:document.getElementById('eg-dept').value,poz:document.getElementById('eg-poz').value||'Personel',egitim:document.getElementById('eg-egitim').value||'—',tarih:document.getElementById('eg-tarih').value||'',sure:parseInt(document.getElementById('eg-sure').value)||0,puan:parseInt(document.getElementById('eg-puan').value)||0,pct:pct,du:pct>=100?'Tamamlandı':pct>0?'Devam Ediyor':'Bekliyor'});
+  renderEgitim();closeModal('egitim-modal');toast('Eğitim kaydı eklendi.');
+  if(window.fbSave)fbSave('egitim',egitimData[0]).then(function(id){if(id)egitimData[0]._fbId=id;});
+  clr(['eg-ad','eg-poz','eg-egitim','eg-tarih','eg-sure','eg-puan','eg-pct']);
+}
+
+function renderRisk(){
+  var tbody=document.getElementById('risk-tbody');if(!tbody)return;
+  tbody.innerHTML=riskData.map(function(r){var c=r.skor>=15?'var(--red)':r.skor>=10?'var(--amber)':r.skor>=5?'var(--blue)':'var(--green)';return'<tr><td style="font-weight:700;color:var(--amber)">'+r.no+'</td><td>'+r.tanim+'</td><td><span class="badge bgr">'+r.kat+'</span></td><td style="text-align:center">'+r.olas+'</td><td style="text-align:center">'+r.etki+'</td><td style="text-align:center;font-weight:700;color:'+c+'">'+r.skor+'</td><td style="font-size:11px">'+r.aksiyon+'</td><td>'+r.sor+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
+}
+function saveRisk(){
+  if(!document.getElementById('r-tanim').value){toast('Risk tanımı zorunlu!');return;}
+  var o=parseInt(document.getElementById('r-olas').value)||1;var e=parseInt(document.getElementById('r-etki').value)||1;
+  var tip=document.getElementById('r-tip').value;
+  var pre=tip==='Risk'?'R':'F';
+  var no=pre+'-'+(riskData.filter(function(x){return x.tip===tip;}).length+1).toString().padStart(3,'0');
+  riskData.unshift({no:no,tanim:document.getElementById('r-tanim').value,kat:document.getElementById('r-kat').value,tip:tip,olas:o,etki:e,skor:o*e,aksiyon:document.getElementById('r-aksiyon').value||'—',sor:document.getElementById('r-sor').value||'KM',du:'Açık'});
+  renderRisk();closeModal('risk-modal');toast('Risk kaydı eklendi.');
+  if(window.fbSave)fbSave('risk',riskData[0]).then(function(id){if(id)riskData[0]._fbId=id;});
+  clr(['r-tanim','r-aksiyon','r-sor','r-olas','r-etki']);
+}
+
+function renderDenetim(){
+  var tbody=document.getElementById('denetim-tbody');if(!tbody)return;
+  tbody.innerHTML=denetimData.map(function(r){return'<tr><td>'+fd(r.t)+'</td><td>'+r.kapsam+'</td><td><span class="badge bb" style="font-size:9px">'+r.madde+'</span></td><td>'+r.den+'</td><td style="text-align:center">'+r.bulgu+'</td><td style="text-align:center">'+badge(r.uyg>0?'Uygunsuzluk Var':'Bulgu Yok')+'</td><td style="color:var(--green)">'+r.capa+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
+}
+function saveDenetim(){
+  denetimData.unshift({t:document.getElementById('dn-tarih').value||td0(),kapsam:document.getElementById('dn-kapsam').value||'—',madde:document.getElementById('dn-madde').value,den:document.getElementById('dn-den').value||'KM',bulgu:0,uyg:0,capa:'—',du:'Planlandı'});
+  renderDenetim();closeModal('denetim-modal');toast('Denetim planlandı.');
+  if(window.fbSave)fbSave('denetim',denetimData[0]).then(function(id){if(id)denetimData[0]._fbId=id;});
+  clr(['dn-tarih','dn-kapsam','dn-den','dn-not']);
+}
+
+function renderYGR(){
+  var tbody=document.getElementById('ygr-tbody');if(!tbody)return;
+  tbody.innerHTML=ygrData.map(function(r){return'<tr><td>'+fd(r.t)+'</td><td>'+r.katilim+'</td><td style="text-align:center">'+r.karar+'</td><td style="font-size:11px">'+r.aksiyon+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
+}
+function saveYGR(){
+  ygrData.unshift({t:document.getElementById('y-tarih').value||td0(),katilim:document.getElementById('y-katilim').value||'—',karar:0,aksiyon:document.getElementById('y-gundem').value||'—',du:'Planlandı'});
+  renderYGR();closeModal('ygr-modal');toast('YGG toplantısı planlandı.');
+  if(window.fbSave)fbSave('ygr',ygrData[0]).then(function(id){if(id)ygrData[0]._fbId=id;});
+  clr(['y-tarih','y-katilim','y-gundem']);
+}
+
+function renderKPI(){
+  var gkkTot=gkkData.length, gkkOk=gkkData.filter(function(r){return r.k==='Kabul';}).length;
+  var gkkOran=gkkTot>0?Math.round(gkkOk/gkkTot*100):null;
+  var finTot=finalData.length, finOk=finalData.filter(function(r){return r.k==='Sevkiyat';}).length;
+  var finOran=finTot>0?Math.round(finOk/finTot*100):null;
+  var open8d=data8d.filter(function(r){return r.du!=='Kapandı';}).length;
+  var acikSik=sikayetData.filter(function(r){return r.du!=='Kapandı';}).length;
+  var s5Avg=data5s.length?Math.round(data5s.reduce(function(a,b){return a+b.s.reduce(function(x,y){return x+y;},0);},0)/data5s.length):null;
+  var egTot=egitimData.length, egOk=egitimData.filter(function(r){return r.du==='Tamamlandı';}).length;
+  var egOran=egTot>0?Math.round(egOk/egTot*100):null;
+  var nemOk=prosesData.filter(function(r){return r.p==='Nem Kontrolü'&&r.sonuc==='Uygun';}).length;
+  var nemTot=prosesData.filter(function(r){return r.p==='Nem Kontrolü';}).length;
+  var nemOran=nemTot>0?Math.round(nemOk/nemTot*100):null;
+  var kpis=[
+    ['GKK Kabul Oranı', gkkOran!==null?(gkkOran+'%'):'—', '≥%92', gkkOran, 92],
+    ['Final Uygunluk',  finOran!==null?(finOran+'%'):'—',  '≥%95', finOran, 95],
+    ['Açık 8D Dosyası', open8d+'',  '0 hedef', open8d===0?100:0, 1],
+    ['Müşteri Şikayet', acikSik+'', '≤3/ay',   acikSik<=3?100:0, 1],
+    ['Nem Uygunluk',    nemOran!==null?(nemOran+'%'):'—', '≥%90', nemOran, 90],
+    ['5S Ortalama',     s5Avg!==null?(s5Avg+'/100'):'—',  '≥75',  s5Avg,   75],
+    ['Eğitim Tamamlama',egOran!==null?(egOran+'%'):'—',   '≥%85', egOran,  85],
+  ];
+  var el=document.getElementById('kpi-karne');
+  if(el) el.innerHTML=kpis.map(function(k){
+    var ok=k[3]!==null&&k[3]>=k[4];
+    var col=k[3]===null?'var(--muted)':ok?'var(--green)':'var(--amber)';
+    return'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border)"><div><div style="font-size:12px;font-weight:500">'+k[0]+'</div><div style="font-size:10px;color:var(--muted)">Hedef: '+k[2]+'</div></div><span style="font-size:14px;font-weight:700;color:'+col+'">'+k[1]+'</span></div>';
+  }).join('');
+  // Trend - GKK aylık
+  var grouped={};
+  gkkData.forEach(function(r){var ay=r.t?r.t.slice(0,7):'?';if(!grouped[ay])grouped[ay]={tot:0,ok:0};grouped[ay].tot++;if(r.k==='Kabul')grouped[ay].ok++;});
+  var aylar=Object.keys(grouped).sort().slice(-6);
+  var el2=document.getElementById('kpi-trend');
+  if(el2) el2.innerHTML=aylar.length?'<div style="font-size:11px;color:var(--muted);margin-bottom:10px">GKK Kabul Oranı Aylık (%)</div>'+aylar.map(function(ay){var v=Math.round(grouped[ay].ok/grouped[ay].tot*100);return'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="width:36px;font-size:10px;color:var(--muted)">'+ay.slice(5)+'</div><div style="flex:1;height:6px;border-radius:3px;background:#e5ede8;overflow:hidden"><div style="height:100%;border-radius:3px;background:var(--green);width:'+v+'%"></div></div><div style="font-size:11px;font-weight:600;min-width:30px">'+v+'%</div></div>';}).join(''):'<div style="color:var(--muted);font-size:11px;padding:16px 0;text-align:center">GKK kaydı girdikçe trend oluşur</div>';
+}
+
+function render5S(){
+  var tbody=document.getElementById('5s-tbody');if(!tbody)return;
+  tbody.innerHTML=data5s.map(function(r){var c=r.top>=80?'var(--green)':r.top>=60?'var(--amber)':'var(--red)';var sonuc=r.top>=80?'İyi':r.top>=60?'Orta':'Yetersiz';return'<tr><td>'+fd(r.t)+'</td><td>'+r.b+'</td>'+r.s.map(function(v){return'<td style="text-align:center">'+v+'</td>';}).join('')+'<td style="font-weight:700;text-align:center;color:'+c+'">'+r.top+'</td><td>'+badge(sonuc)+'</td><td>'+r.den+'</td></tr>';}).join('');
+}
+function save5S(){
+  var sc=[0,1,2,3,4].map(function(i){return Math.min(20,parseInt(document.getElementById('s-'+i).value)||0);});
+  data5s.unshift({t:td0(),b:document.getElementById('s-bolge').value,s:sc,top:sc.reduce(function(a,b){return a+b;},0),den:document.getElementById('s-den').value||'KM',not:document.getElementById('s-not').value});
+  render5S();renderDash();closeModal('5s-modal');toast('5S denetimi kaydedildi.');
+  if(window.fbSave)fbSave('5s',data5s[0]).then(function(id){if(id)data5s[0]._fbId=id;});
+  [0,1,2,3,4].forEach(function(i){document.getElementById('s-'+i).value='';});
+  clr(['s-den','s-not']);
+}
+
+function renderLot(){
+  var tbody=document.getElementById('lot-tbody');if(!tbody)return;
+  tbody.innerHTML=lotData.map(function(r){return'<tr><td style="font-weight:700;color:var(--blue)">'+r.no+'</td><td>'+r.a+'</td><td>'+r.gkk+'</td><td>'+r.firın+'</td><td>'+r.final+'</td><td>'+fd(r.paket)+'</td><td>'+r.musteri+'</td><td>'+fd(r.sevk)+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
+}
+function saveLot(){
+  if(!document.getElementById('l-no').value){toast('Lot No zorunlu!');return;}
+  lotData.unshift({no:document.getElementById('l-no').value,a:document.getElementById('l-agac').value,gkk:document.getElementById('l-gkk').value||'—',firın:document.getElementById('l-firın').value||'—',final:document.getElementById('l-final').value||'—',musteri:document.getElementById('l-musteri').value||'—',paket:document.getElementById('l-paket').value||'—',sevk:document.getElementById('l-sevk').value||'—',du:'Aktif'});
+  renderLot();closeModal('lot-modal');toast('Lot kaydı oluşturuldu.');
+  if(window.fbSave)fbSave('lot',lotData[0]).then(function(id){if(id)lotData[0]._fbId=id;});
+  clr(['l-no','l-gkk','l-firın','l-final','l-musteri','l-paket','l-sevk']);
+}
+
+function renderEnerji(){
+  var tbody=document.getElementById('enerji-tbody');if(!tbody)return;
+  tbody.innerHTML=enerjiData.map(function(r){return'<tr><td>'+fd(r.t)+'</td><td>'+r.bolge+'</td><td style="text-align:center">'+r.el+'</td><td style="text-align:center">'+r.gaz+'</td><td style="text-align:center">'+r.talat+'</td><td style="text-align:center;color:var(--green)">'+r.geri+'</td><td style="text-align:center;color:var(--amber)">'+r.co2+'</td></tr>';}).join('');
+  var totEl=enerjiData.reduce(function(a,b){return a+b.el;},0);
+  var totGaz=enerjiData.reduce(function(a,b){return a+b.gaz;},0);
+  var totTalat=enerjiData.reduce(function(a,b){return a+b.talat;},0);
+  var totGeri=enerjiData.reduce(function(a,b){return a+b.geri;},0);
+  document.getElementById('enerji-ozet').innerHTML='<div class="g2"><div style="background:var(--bg);border-radius:8px;padding:12px"><div style="font-size:10px;color:var(--muted)">Toplam Elektrik</div><div style="font-size:20px;font-weight:600;color:var(--blue)">'+totEl+' kWh</div></div><div style="background:var(--bg);border-radius:8px;padding:12px"><div style="font-size:10px;color:var(--muted)">Toplam Doğalgaz</div><div style="font-size:20px;font-weight:600;color:var(--amber)">'+totGaz+' m³</div></div></div>';
+  document.getElementById('atik-ozet').innerHTML='<div class="g2"><div style="background:var(--bg);border-radius:8px;padding:12px"><div style="font-size:10px;color:var(--muted)">Talaş Atık</div><div style="font-size:20px;font-weight:600;color:var(--red)">'+totTalat+' kg</div></div><div style="background:var(--bg);border-radius:8px;padding:12px"><div style="font-size:10px;color:var(--muted)">Geri Dönüşüm</div><div style="font-size:20px;font-weight:600;color:var(--green)">'+totGeri+' kg</div><div style="font-size:10px;color:var(--muted)">Oran: '+Math.round(totGeri/totTalat*100)+'%</div></div></div>';
+}
+function saveEnerji(){
+  var el=parseFloat(document.getElementById('en-el').value)||0;
+  var gaz=parseFloat(document.getElementById('en-gaz').value)||0;
+  enerjiData.unshift({t:document.getElementById('en-tarih').value||td0(),bolge:document.getElementById('en-bolge').value,el:el,gaz:gaz,talat:parseFloat(document.getElementById('en-talat').value)||0,geri:parseFloat(document.getElementById('en-geri').value)||0,co2:Math.round(el*0.45+gaz*2.02)});
+  renderEnerji();closeModal('enerji-modal');toast('Enerji kaydı eklendi.');
+  if(window.fbSave)fbSave('enerji',enerjiData[0]).then(function(id){if(id)enerjiData[0]._fbId=id;});
+  clr(['en-tarih','en-el','en-gaz','en-talat','en-geri']);
+}
+
+function renderBilgi(){
+  var tbody=document.getElementById('bilgi-tbody');if(!tbody)return;
+  tbody.innerHTML=bilgiData.map(function(r){return'<tr><td style="font-weight:600">'+r.baslik+'</td><td><span class="badge bb">'+r.kat+'</span></td><td style="font-size:11px;color:var(--muted)">'+r.ozet+'</td><td>'+fd(r.guncelleme)+'</td><td>'+r.sor+'</td><td><span class="badge bgr">'+r.erisim+'</span></td></tr>';}).join('');
+}
+function saveBilgi(){
+  if(!document.getElementById('bi-baslik').value){toast('Başlık zorunlu!');return;}
+  bilgiData.unshift({baslik:document.getElementById('bi-baslik').value,kat:document.getElementById('bi-kat').value,ozet:document.getElementById('bi-icerik').value.slice(0,60)+'...',guncelleme:td0(),sor:document.getElementById('bi-sor').value||'KM',erisim:document.getElementById('bi-erisim').value});
+  renderBilgi();closeModal('bilgi-modal');toast('Bilgi kaydı eklendi.');
+  if(window.fbSave)fbSave('bilgi',bilgiData[0]).then(function(id){if(id)bilgiData[0]._fbId=id;});
+  clr(['bi-baslik','bi-icerik','bi-sor']);
+}
+
+function renderUsers(){
+  var tbody=document.getElementById('users-tbody');if(!tbody)return;
+  tbody.innerHTML=usersData.map(function(r){return'<tr><td style="font-weight:600">'+r.ad+'</td><td style="color:var(--blue)">'+r.mail+'</td><td>'+r.dept+'</td><td><span class="badge bb">'+r.rol+'</span></td><td>'+badge(r.du)+'</td><td style="font-size:11px;color:var(--muted)">'+r.giris+'</td></tr>';}).join('');
+}
+function saveUser(){
+  if(!document.getElementById('u-ad').value){toast('Ad zorunlu!');return;}
+  usersData.push({ad:document.getElementById('u-ad').value,mail:document.getElementById('u-mail').value||'—',dept:document.getElementById('u-dept').value,rol:document.getElementById('u-rol').value,du:'Aktif',giris:'—'});
+  renderUsers();closeModal('user-modal');toast('Kullanıcı oluşturuldu.');
+  clr(['u-ad','u-mail']);
+}
+
+// ============ PROSES AKIŞ ============
+var akisMap={
+  'Ayous Kereste':[['Hammadde','green'],['GKK','kontrol'],['Uygun?','kontrol'],['|RET→Ayıklama','red'],['Kabul','green'],['Çıtalama',''],['Thermowood',''],['|BURN BLOCK','burn'],['Kurutma',''],['Nem Kont.%4-8','kontrol'],['Çıta Bozma',''],['Profilleme',''],['Opticut',''],['Uygun?','kontrol'],['Paketleme',''],['Final Kontrol','kontrol'],['Sevkiyat','green'],['|Ret→Odun/Lamine','red']],
+  'Ayous Lata':[['Hammadde','green'],['GKK','kontrol'],['Kabul','green'],['Çıtalama',''],['Dilimleme',''],['Thermowood',''],['|BURN BLOCK','burn'],['Kurutma',''],['Nem Kont.%4-8','kontrol'],['Çıta Bozma',''],['Profilleme',''],['Opticut',''],['Uygun?','kontrol'],['Paketleme',''],['Final Kontrol','kontrol'],['Sevkiyat','green']],
+  'Çam':[['Hammadde','green'],['GKK','kontrol'],['Kabul','green'],['Çıtalama',''],['Thermowood',''],['Çıta Bozma',''],['|BURN BLOCK','burn'],['Kurutma',''],['Nem Kont.%4-8','kontrol'],['Profilleme',''],['Opticut',''],['Uygun?','kontrol'],['Paketleme',''],['Final Kontrol','kontrol'],['Sevkiyat','green']],
+  'Dişbudak UK':[['Hammadde','green'],['GKK','kontrol'],['Kabul','green'],['Çıtalama',''],['Thermowood',''],['Çıta Bozma',''],['Ön Silme',''],['|BURN BLOCK','burn'],['Kurutma',''],['Nem Kont.%4-8','kontrol'],['Opticut 10-30cm',''],['Profilleme',''],['Baş Kesme',''],['Uygun?','kontrol'],['Paketleme',''],['Final Kontrol','kontrol'],['Sevkiyat','green']],
+  'Dişbudak USA':[['Hammadde','green'],['GKK','kontrol'],['Kabul','green'],['Çıtalama',''],['Thermowood',''],['Ayrış.+Çıta Bozma',''],['Ön Silme',''],['|BURN BLOCK','burn'],['Kurutma',''],['Nem Kont.%4-8','kontrol'],['Opticut 10-30cm',''],['Profilleme',''],['Baş Kesme',''],['Uygun?','kontrol'],['Paketleme',''],['Final Kontrol','kontrol'],['Sevkiyat','green']],
+  'Iroko FK':[['Hammadde','green'],['GKK','kontrol'],['Kabul','green'],['Çıtalama',''],['Thermowood',''],['|BURN BLOCK','burn'],['Kurutma',''],['Nem Kont.%4-8','kontrol'],['Çıta Bozma',''],['Opticut 10cm',''],['Profilleme',''],['Baş Kesme',''],['Uygun?','kontrol'],['Paketleme',''],['Final Kontrol','kontrol'],['Sevkiyat','green']],
+  'Iroko HK Lata':[['Hammadde','green'],['GKK','kontrol'],['Kabul','green'],['Dilimleme',''],['Çıtalama',''],['Thermowood',''],['|BURN BLOCK','burn'],['Kurutma',''],['Nem Kont.%4-8','kontrol'],['Çıta Bozma',''],['Opticut 10cm',''],['Profilleme',''],['Baş Kesme',''],['Uygun?','kontrol'],['Paketleme',''],['Final Kontrol','kontrol'],['Sevkiyat','green']],
+  'Tulipwood':[['Hammadde','green'],['GKK','kontrol'],['Kabul','green'],['Çıtalama',''],['Thermowood',''],['Çıta Bozma',''],['|BURN BLOCK','burn'],['Kurutma',''],['Nem Kont.%4-8','kontrol'],['Profilleme',''],['Opticut',''],['Uygun?','kontrol'],['Paketleme',''],['Final Kontrol','kontrol'],['Sevkiyat','green']],
+};
+function showAkis(agac,el){
+  document.getElementById('akis-title').textContent=agac+' — Proses Akış Şeması';
+  document.querySelectorAll('#akis-btns .btn').forEach(function(b){b.classList.remove('btn-p');});
+  if(el)el.classList.add('btn-p');
+  var steps=akisMap[agac]||[];
+  var html='<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">';
+  steps.forEach(function(s,i){
+    if(s[0].startsWith('|')){
+      if(s[1]==='burn'){html+='<div class="burn-box"><div class="burn-title">&#128293; BURN BLOCK (Paralel Akış)</div><div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center"><div class="ps-box optional">Ön Silme</div><span class="ps-arrow">→</span><div class="ps-box optional">Burn Block</div><span class="ps-arrow">→</span><div class="ps-box optional">Kurutma</div><span class="ps-arrow">→</span><div class="ps-box optional">Nem Kont.</div></div></div>';}
+      else{html+='<div class="ps-box red" style="border-style:dashed">'+s[0].slice(1)+'</div>';}
+    } else {
+      if(i>0&&!steps[i-1][0].startsWith('|'))html+='<span class="ps-arrow">→</span>';
+      html+='<div class="ps-box '+(s[1]||'')+'">'+s[0]+'</div>';
+    }
+  });
+  html+='</div><div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:var(--muted)"><span style="color:var(--dgreen)">&#9632; Yeşil: Kabul/Ana akış</span><span style="color:var(--blue)">&#9632; Mavi: Kontrol noktası</span><span style="color:var(--red)">&#9632; Kırmızı kesik: Hurda/Ret</span><span style="color:var(--amber)">&#9632; Turuncu kesik: Paralel/Opsiyonel</span></div>';
+  document.getElementById('akis-content').innerHTML=html;
+}
+
+// ============ CSV EXPORT ============
+function exportCSV(type){
+  var SEP=';';
+  var rows=[];
+  var fn='';
+
+  // Güvenli hücre: saf ASCII/UTF-8, — yerine boş, tehlikeli karakter tırnakla sar
+  function cel(v){
+    if(v===null||v===undefined)return'';
+    var s=String(v).trim();
+    if(s==='—'||s==='-'||s==='')return'';  // em dash = boş
+    s=s.replace(/\r?\n/g,' ');
+    if(s.indexOf(';')!==-1||s.indexOf('"')!==-1){
+      return '"'+s.replace(/"/g,'""')+'"';
+    }
+    return s;
+  }
+  function R(arr){return arr.map(cel).join(SEP);}
+
+  if(type==='gkk'){
+    fn='GKK_Raporu';
+    // ANA başlık satırı
+    rows.push(R([
+      'Tarih','Agac Turu','Tedarikci','Parti No','Miktar m3',
+      'Nem 1 %','Nem 2 %','Nem 3 %','Nem Ort %','Nem Alt Limit','Nem Ust Limit','Nem Durumu',
+      'Profil/Boyut','Hedef','Alt Tolerans','Ust Tolerans','Alt Limit','Ust Limit','Olculen','Boyut Durumu',
+      'Gorsel Kontrol','Karar','Kaydeden','Foto Sayisi','Belge Sayisi','Not'
+    ]));
+    gkkData.forEach(function(r){
+      // Boyut satırı yoksa 1 satır yaz
+      if(!r.dims||!r.dims.length){
+        rows.push(R([
+          fd(r.t),r.a,r.ted,r.parti,r.m,
+          r.nem1!==null?r.nem1:'',
+          r.nem2!==null?r.nem2:'',
+          r.nem3!==null?r.nem3:'',
+          r.nem!==null?r.nem:'',
+          r.nemMin||4, r.nemMax||8,
+          r.nemOk===true?'UYGUN':r.nemOk===false?'UYGUNSUZ':'-',
+          '-','-','-','-','-','-','-','-',
+          r.g,r.k,r.kayit,r.foto||0,r.docCount||0,r.not||''
+        ]));
+      } else {
+        // Her boyut için ayrı satır
+        r.dims.forEach(function(d,i){
+          rows.push(R([
+            i===0?fd(r.t):'',
+            i===0?r.a:'',
+            i===0?r.ted:'',
+            i===0?r.parti:'',
+            i===0?r.m:'',
+            i===0?(r.nem1!==null?r.nem1:''):'',
+            i===0?(r.nem2!==null?r.nem2:''):'',
+            i===0?(r.nem3!==null?r.nem3:''):'',
+            i===0?(r.nem!==null?r.nem:''):'',
+            i===0?(r.nemMin||4):'',
+            i===0?(r.nemMax||8):'',
+            i===0?(r.nemOk===true?'UYGUN':r.nemOk===false?'UYGUNSUZ':'-'):'',
+            d.name||'',
+            d.hedef!==undefined?d.hedef:'',
+            d.altTol!==undefined?d.altTol:'',
+            d.ustTol!==undefined?d.ustTol:'',
+            d.altLim!==null&&d.altLim!==undefined?d.altLim:'',
+            d.ustLim!==null&&d.ustLim!==undefined?d.ustLim:'',
+            d.olcum!==undefined?d.olcum:'',
+            d.ok===true?'UYGUN':d.ok===false?'UYGUNSUZ':'-',
+            i===0?r.g:'',
+            i===0?r.k:'',
+            i===0?r.kayit:'',
+            i===0?(r.foto||0):'',
+            i===0?(r.docCount||0):'',
+            i===0?(r.not||''):''
+          ]));
+        });
+      }
+    });
+  }
+  else if(type==='proses'){
+    fn='Proses_Raporu';
+    rows.push(R([
+      'Tarih','Agac Turu','Proses','Parti No','Operator',
+      'Nem 1 %','Nem 2 %','Nem 3 %','Nem Ort %','Nem Alt Limit','Nem Ust Limit','Nem Durumu',
+      'Parametre','Hedef','Alt Tolerans','Ust Tolerans','Alt Limit','Ust Limit','Olculen','Tol Durumu',
+      'Genel Sonuc','Foto Sayisi','Belge Sayisi','Not'
+    ]));
+    prosesData.forEach(function(r){
+      if(!r.params||!r.params.length){
+        rows.push(R([
+          fd(r.t),r.a,r.p,r.parti||'',r.op||'',
+          r.nem1!==null?r.nem1:'',r.nem2!==null?r.nem2:'',r.nem3!==null?r.nem3:'',
+          r.nem!==null?r.nem:'',r.nemMin||4,r.nemMax||8,
+          r.nemOk===true?'UYGUN':r.nemOk===false?'UYGUNSUZ':'-',
+          '-','-','-','-','-','-','-','-',
+          r.sonuc||'-',r.foto||0,r.docCount||0,r.not||''
+        ]));
+      } else {
+        r.params.forEach(function(p,i){
+          rows.push(R([
+            i===0?fd(r.t):'', i===0?(r.a||''):'', i===0?(r.p||''):'',
+            i===0?(r.parti||''):'', i===0?(r.op||''):'',
+            i===0?(r.nem1!==null?r.nem1:''):'',
+            i===0?(r.nem2!==null?r.nem2:''):'',
+            i===0?(r.nem3!==null?r.nem3:''):'',
+            i===0?(r.nem!==null?r.nem:''):'',
+            i===0?(r.nemMin||4):'', i===0?(r.nemMax||8):'',
+            i===0?(r.nemOk===true?'UYGUN':r.nemOk===false?'UYGUNSUZ':'-'):'',
+            p.name||'',
+            p.hedef!==undefined?p.hedef:'',
+            p.altTol!==undefined?p.altTol:'',
+            p.ustTol!==undefined?p.ustTol:'',
+            p.altLim!==null&&p.altLim!==undefined?p.altLim:'',
+            p.ustLim!==null&&p.ustLim!==undefined?p.ustLim:'',
+            p.olcum!==undefined?p.olcum:'',
+            p.ok===true?'UYGUN':p.ok===false?'UYGUNSUZ':'-',
+            i===0?(r.sonuc||''):'',
+            i===0?(r.foto||0):'', i===0?(r.docCount||0):'',
+            i===0?(r.not||''):''
+          ]));
+        });
+      }
+    });
+  }
+  else if(type==='final'){
+    fn='Final_Kontrol_Raporu';
+    rows.push(R([
+      'Tarih','Agac Turu','Parti No','Miktar','Profil/Urun',
+      'Nem 1 %','Nem 2 %','Nem 3 %','Nem Ort %','Nem Alt Limit','Nem Ust Limit','Nem Durumu',
+      'Kontrol Noktasi','Hedef mm','Alt Tolerans','Ust Tolerans','Alt Limit mm','Ust Limit mm','Olculen mm','Boyut Durumu',
+      'Gorsel Kontrol','Musteri Ozel','Karar','Foto Sayisi','Belge Sayisi','Not'
+    ]));
+    finalData.forEach(function(r){
+      if(!r.dims||!r.dims.length){
+        rows.push(R([
+          fd(r.t),r.a,r.parti,r.m,r.profil,
+          r.nem1!==null?r.nem1:'',r.nem2!==null?r.nem2:'',r.nem3!==null?r.nem3:'',
+          r.nem!==null?r.nem:'',r.nemMin||4,r.nemMax||8,
+          r.nemOk===true?'UYGUN':r.nemOk===false?'UYGUNSUZ':'-',
+          '-','-','-','-','-','-','-','-',
+          r.g,r.mu,r.k,r.foto||0,r.docCount||0,r.not||''
+        ]));
+      } else {
+        r.dims.forEach(function(d,i){
+          rows.push(R([
+            i===0?fd(r.t):'', i===0?(r.a||''):'', i===0?(r.parti||''):'',
+            i===0?(r.m||''):'', i===0?(r.profil||''):'',
+            i===0?(r.nem1!==null?r.nem1:''):'',
+            i===0?(r.nem2!==null?r.nem2:''):'',
+            i===0?(r.nem3!==null?r.nem3:''):'',
+            i===0?(r.nem!==null?r.nem:''):'',
+            i===0?(r.nemMin||4):'', i===0?(r.nemMax||8):'',
+            i===0?(r.nemOk===true?'UYGUN':r.nemOk===false?'UYGUNSUZ':'-'):'',
+            d.name||'',
+            d.hedef!==undefined?d.hedef:'',
+            d.altTol!==undefined?d.altTol:'',
+            d.ustTol!==undefined?d.ustTol:'',
+            d.altLim!==null&&d.altLim!==undefined?d.altLim:'',
+            d.ustLim!==null&&d.ustLim!==undefined?d.ustLim:'',
+            d.olcum!==undefined?d.olcum:'',
+            d.ok===true?'UYGUN':d.ok===false?'UYGUNSUZ':'-',
+            i===0?r.g:'', i===0?r.mu:'', i===0?r.k:'',
+            i===0?(r.foto||0):'', i===0?(r.docCount||0):'',
+            i===0?(r.not||''):''
+          ]));
+        });
+      }
+    });
+  }
+  else if(type==='kalib'){fn='Kalibrasyon';rows.push(R(['Cihaz No','Cihaz Adi','Konum','Son Kalibrasyon','Sonraki Kalibrasyon','Periyot','Yapan Kuruluş','Sertifika No','Kalan Gun','Durum','Not']));kalibData.forEach(function(r){var kg=r._kalanGun!==undefined?r._kalanGun:(r.sonraki?Math.ceil((new Date(r.sonraki)-new Date())/(1000*60*60*24)):'');rows.push(R([r.no,r.ad,r.konum,fd(r.son),fd(r.sonraki),r.periyot,r.kurum,r.sertno||'',kg,r.du,r.not||'']));});}
+  else if(type==='8d'){fn='8D';rows.push(R(['No','Tarih','Agac','Problem','Kok Neden','Onlem','Durum']));data8d.forEach(function(r){rows.push(R([r.no,fd(r.t),r.a,r.prob||'',r.koken||'',r.onlem||'',r.du]));});}
+  else if(type==='capa'){fn='CAPA';rows.push(R(['No','Tarih','Kaynak','Aciklama','Kok Neden','Aksiyon','Sorumlu','Termin','Durum']));capaData.forEach(function(r){rows.push(R([r.no,fd(r.t),r.kaynak||'',r.acik||'',r.koken||'',r.aksiyon||'',r.sor||'',fd(r.ter),r.du]));});}
+  else if(type==='nck'){fn='NCR';rows.push(R(['NCR No','Tarih','Agac','Parti','Uygunsuzluk','Karantina','Yonlendirme','Sorumlu','Durum']));nckData.forEach(function(r){rows.push(R([r.no,fd(r.t),r.a,r.pt,r.uy,r.kr,r.kd,r.sr,r.du]));});}
+  else if(type==='sikayet'){fn='Sikayet';rows.push(R(['No','Tarih','Musteri','Konu','Urun','Oncelik','8D Ref','Durum']));sikayetData.forEach(function(r){rows.push(R([r.no,fd(r.t),r.mu,r.kn,r.ur,r.on,r.d8||'',r.du]));});}
+  else if(type==='ted'){fn='Tedarikci';rows.push(R(['Tedarikci','Malzeme','Ulke','Kalite Skoru','Teslimat Skoru','Genel Skor','Tarih','Durum']));tedData.forEach(function(r){rows.push(R([r.ad,r.ml,r.ul,r.kskor||0,r.tskor||0,Math.round(((r.kskor||0)+(r.tskor||0))/2),fd(r.t),r.du]));});}
+  else if(type==='docs'){fn='Dokumanlar';rows.push(R(['Dokuman No','Baslik','Tur','Revizyon','ISO Maddesi','Sorumlu','Durum','Gecerlilik']));docData.forEach(function(r){rows.push(R([r.no,r.baslik,r.tur,r.rev,r.madde,r.sor,r.du,fd(r.gecerli)]));});}
+  else if(type==='risk'){fn='Risk';rows.push(R(['No','Tanim','Tip','Kategori','Olasilik','Etki','Risk Skoru','Aksiyon','Sorumlu','Durum']));riskData.forEach(function(r){rows.push(R([r.no,r.tn||'',r.ti||'',r.kt||'',r.olas,r.etki,(r.olas||0)*(r.etki||0),r.ak||'',r.sr||'',r.du]));});}
+  else if(type==='5s'){fn='5S';rows.push(R(['Tarih','Bolge','Seiri','Seiton','Seiso','Seiketsu','Shitsuke','Toplam','Denetci']));data5s.forEach(function(r){var s=r.s||[0,0,0,0,0];rows.push(R([fd(r.t),r.b,s[0],s[1],s[2],s[3],s[4],s.reduce(function(a,b){return a+b;},0),r.dn]));});}
+  else if(type==='lot'){fn='Lot';rows.push(R(['Lot No','Agac','GKK Parti','Firin Proses','Final','Paket Tarihi','Musteri','Sevk Tarihi','Durum']));lotData.forEach(function(r){rows.push(R([r.no,r.a,r.gk||'',r.fn||'',r.fk||'',fd(r.pt),r.mu,fd(r.sv),r.du]));});}
+
+  if(!rows.length){toast('Veri yok');return;}
+
+  // UTF-8 BOM (Excel Türkçe karakter desteği için)
+  // sep= satırı YOK — BOM yeterli, sep= bazen encoding'i bozar
+  var content = '\uFEFF' + rows.join('\r\n');
+
+  var blob=new Blob([content],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='Novawood_'+fn+'_'+td0()+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast(fn+' CSV indirildi');
+}
+
+function openNewRecord(){
+  var id=document.querySelector('.sec.active').id.replace('sec-','');
+  var map={gkk:'gkk-modal',proses:'proses-modal',final:'final-modal',burn:'burn-modal',kalib:'kalib-modal',msa:'msa-modal',spc:'spc-modal','8d':'8d-modal',capa:'capa-modal',nck:'nck-modal',sikayet:'sikayet-modal',ted:'ted-modal',satin:'satin-modal',docs:'doc-modal',egitim:'egitim-modal',risk:'risk-modal',denetim:'denetim-modal',ygr:'ygr-modal','5s':'5s-modal',izlenebilirlik:'lot-modal',enerji:'enerji-modal',bilgi:'bilgi-modal'};
+  if(map[id])openModal(map[id]);
+}
+
+// ============ TABS ============
+function showTab(id,el){
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+
+// ============ INIT ============
+
+// ──────────────────────────────────────────────────────
+// calcNemGKK — 3 ölçüm ortalaması + tolerans renk kodu
+// ──────────────────────────────────────────────────────
+
+function checkProsesTol(){
+  var o1=parseFloat((document.getElementById('p-ol1')||{}).value);
+  var o2=parseFloat((document.getElementById('p-ol2')||{}).value);
+  var o3=parseFloat((document.getElementById('p-ol3')||{}).value);
+  var vals=[o1,o2,o3].filter(function(v){return!isNaN(v);});
+  var ortEl=document.getElementById('p-ol-ort');
+  var resEl=document.getElementById('p-tol-result');
+  if(!vals.length){if(ortEl)ortEl.value='';if(resEl)resEl.style.display='none';return;}
+  var ort=Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length*100)/100;
+  if(ortEl)ortEl.value=ort;
+  var mn=parseFloat((document.getElementById('p-tol-min')||{}).value);
+  var mx=parseFloat((document.getElementById('p-tol-max')||{}).value);
+  if(!isNaN(mn)&&!isNaN(mx)&&resEl){
+    var ok=ort>=mn&&ort<=mx;
+    resEl.style.display='block';
+    resEl.style.background=ok?'#dcf5ea':'#fce8e8';
+    resEl.style.color=ok?'#065f3a':'#7a0d0d';
+    resEl.innerHTML=ok?'✅ <strong>UYGUN</strong> — Ort: '+ort+' ('+mn+' – '+mx+')'
+                      :'❌ <strong>UYGUNSUZ!</strong> — Ort: '+ort+' — Limit: '+mn+' – '+mx;
+  } else if(resEl){resEl.style.display='none';}
+}
+
+// ──────────────────────────────────────────────────────
+// viewDocFiles — doküman dosyalarını görüntüle
+// ──────────────────────────────────────────────────────
+function viewDocFiles(idx){
+  var r=docData[idx];
+  if(!r||!r.files||!r.files.length){toast('Bu dokümana dosya eklenmemiş');return;}
+  viewSavedFiles(r.files, r.baslik||'Doküman Dosyaları');
+}
+
+
+// ═══════════════════════════════════════════════════
+// BOYUT SATIRI YARDIMCILARI
+// ═══════════════════════════════════════════════════
+var _dimId = 0;
+
+function _makeDimRow(containerId, deleteCallback) {
+  _dimId++;
+  var id = 'dim_' + _dimId;
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var row = document.createElement('div');
+  row.id = id;
+  row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 36px;gap:5px;margin-bottom:5px;align-items:center';
+  // Placeholder'ları güncelle: alt/üst tol pozitif girilir (hedeften çıkarılır/eklenir)
+  row.innerHTML =
+    '<input class="fi" placeholder="50×120 / Parametre adı" style="font-size:11px" id="' + id + '_name">' +
+    '<input class="fi" type="number" step="0.01" placeholder="51" style="font-size:11px" id="' + id + '_hdf" oninput="_checkDimRow(' + "'" + id + "'" + ')">' +
+    '<input class="fi" type="number" step="0.01" placeholder="1" style="font-size:11px;border-color:#e57373" title="-Tol: Hedef EKSI bu deger = alt sinir. Ornek: Hedef=50, -Tol=1 → Alt sinir=49" id="' + id + '_lo" oninput="_checkDimRow(' + "'" + id + "'" + ')">' +
+    '<input class="fi" type="number" step="0.01" placeholder="1" style="font-size:11px;border-color:#66bb6a" title="+Tol: Hedef ARTI bu deger = ust sinir. Ornek: Hedef=50, +Tol=1 → Ust sinir=51" id="' + id + '_hi" oninput="_checkDimRow(' + "'" + id + "'" + ')">' +
+    '<input class="fi" type="number" step="0.01" placeholder="—" style="font-size:11px;font-weight:700;text-align:center" id="' + id + '_msr" oninput="_checkDimRow(' + "'" + id + "'" + ')">' +
+    '<button type="button" data-rid="' + id + '" onclick="document.getElementById(this.dataset.rid).remove()" style="height:32px;background:#fff0f0;color:#c00;border:1px solid #c00;border-radius:6px;cursor:pointer;font-size:13px">✕</button>';
+  container.appendChild(row);
+  return id;
+}
+
+function _checkDimRow(rowId) {
+  var hdf = parseFloat((document.getElementById(rowId+'_hdf')||{}).value);
+  var lo  = parseFloat((document.getElementById(rowId+'_lo') ||{}).value);
+  var hi  = parseFloat((document.getElementById(rowId+'_hi') ||{}).value);
+  var msr = parseFloat((document.getElementById(rowId+'_msr')||{}).value);
+  var msrEl = document.getElementById(rowId+'_msr');
+  if (!msrEl) return;
+  if (isNaN(msr)) {
+    msrEl.style.background=''; msrEl.style.color=''; msrEl.title='';
+    return;
+  }
+  // Alt limit = Hedef - |altTol|,  Üst limit = Hedef + |üstTol|
+  // Örnek: Hedef=50, -Tol=1, +Tol=1  →  Alt=49, Üst=51
+  var altLim = (!isNaN(hdf) && !isNaN(lo)) ? (hdf - Math.abs(lo)) : -Infinity;
+  var ustLim = (!isNaN(hdf) && !isNaN(hi)) ? (hdf + Math.abs(hi)) :  Infinity;
+  var ok = (msr >= altLim && msr <= ustLim);
+  msrEl.style.background = ok ? '#e8f7ef' : '#fce8e8';
+  msrEl.style.color      = ok ? '#065f3a' : '#a30000';
+  msrEl.style.fontWeight = '700';
+  var limStr = altLim + ' ≤ x ≤ ' + ustLim;
+  msrEl.title = (ok ? '✓ UYGUN  ' : '✗ UYGUNSUZ  ') + limStr;
+}
+
+function _collectDimRows(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return [];
+  var rows = [];
+  container.querySelectorAll('[id^="dim_"]').forEach(function(row) {
+    if (!/^dim_\d+$/.test(row.id)) return;
+    var rid = row.id;
+    var name = (document.getElementById(rid+'_name')||{}).value || '';
+    var hdf  = parseFloat((document.getElementById(rid+'_hdf')||{}).value);
+    var lo   = parseFloat((document.getElementById(rid+'_lo') ||{}).value);
+    var hi   = parseFloat((document.getElementById(rid+'_hi') ||{}).value);
+    var msr  = parseFloat((document.getElementById(rid+'_msr')||{}).value);
+    var altLim = (!isNaN(hdf)&&!isNaN(lo)) ? (hdf-Math.abs(lo)) : null;
+    var ustLim = (!isNaN(hdf)&&!isNaN(hi)) ? (hdf+Math.abs(hi)) : null;
+    var ok = (!isNaN(msr)&&altLim!==null&&ustLim!==null) ? (msr>=altLim&&msr<=ustLim) : null;
+    rows.push({
+      name:name,
+      hedef: isNaN(hdf)?'':hdf,
+      altTol: isNaN(lo)?'':lo,
+      ustTol: isNaN(hi)?'':hi,
+      altLim: altLim,
+      ustLim: ustLim,
+      olcum: isNaN(msr)?'':msr,
+      ok: ok
+    });
+  });
+  return rows;
+}
+
+function gkkAddDimRow()    { _makeDimRow('gkk-dim-rows'); }
+function prosesAddParamRow(){ _makeDimRow('proses-param-rows'); }
+function finalAddDimRow()  { _makeDimRow('final-dim-rows'); }
+
+// ═══════════════════════════════════════════════════
+// calcNemGKK
+// ═══════════════════════════════════════════════════
+function calcNemGKK() {
+  var vals = ['g-nem1','g-nem2','g-nem3'].map(function(id){
+    return parseFloat((document.getElementById(id)||{}).value);
+  }).filter(function(v){ return !isNaN(v); });
+  var ortEl  = document.getElementById('g-nem');
+  var icon   = document.getElementById('g-nem-icon');
+  var resEl  = document.getElementById('g-nem-result');
+  if (!vals.length) {
+    if (ortEl) { ortEl.value=''; ortEl.style.color=''; ortEl.style.background=''; }
+    if (icon) icon.textContent = '';
+    if (resEl) resEl.style.display = 'none';
+    return;
+  }
+  var ort = Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length*10)/10;
+  if (ortEl) ortEl.value = ort;
+  var mn = parseFloat((document.getElementById('g-nem-min')||{value:'4'}).value) || 4;
+  var mx = parseFloat((document.getElementById('g-nem-max')||{value:'8'}).value) || 8;
+  var ok = ort >= mn && ort <= mx;
+  if (ortEl) { ortEl.style.color = ok?'var(--green)':'var(--red)'; ortEl.style.background = ok?'#e8f7ef':'#fce8e8'; }
+  if (icon) icon.textContent = ok ? '✅' : '❌';
+  if (resEl) {
+    resEl.style.display = 'block';
+    resEl.style.background = ok ? '#dcf5ea' : '#fce8e8';
+    resEl.style.color = ok ? '#065f3a' : '#7a0d0d';
+    resEl.textContent = ok ? ('✓ UYGUN — Ort: ' + ort + '% (limit '+mn+'–'+mx+'%)') : ('✗ UYGUNSUZ — Ort: '+ort+'% — Limit: '+mn+'–'+mx+'%');
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// saveGKK
+// ═══════════════════════════════════════════════════
+function saveGKK() {
+  var ted = (document.getElementById('g-ted')||{}).value;
+  if (!ted || !ted.trim()) { toast('Tedarikçi adı zorunlu!'); return; }
+  calcNemGKK();
+  var nem = parseFloat((document.getElementById('g-nem')||{value:'0'}).value) || 0;
+  var mn  = parseFloat((document.getElementById('g-nem-min')||{value:'4'}).value) || 4;
+  var mx  = parseFloat((document.getElementById('g-nem-max')||{value:'8'}).value) || 8;
+  var nemOk = nem > 0 ? (nem >= mn && nem <= mx) : null;
+  var dims  = _collectDimRows('gkk-dim-rows');
+  var photos = collectPhotos('g-photo-preview');
+  var files  = collectDocs('g-doc-list');
+  gkkData.unshift({
+    t: td0(), a: document.getElementById('g-agac').value,
+    ted: ted.trim(),
+    parti: (document.getElementById('g-parti')||{value:'—'}).value || '—',
+    m:     (document.getElementById('g-miktar')||{value:'—'}).value || '—',
+    nem: nem, nemMin: mn, nemMax: mx, nemOk: nemOk,
+    dims: dims,
+    g: (document.getElementById('g-gorsel')||{value:'Uygun'}).value,
+    k: (document.getElementById('g-karar') ||{value:'Kabul'}).value,
+    kayit: (document.getElementById('g-kayit')||{value:'KM'}).value || 'KM',
+    photos: photos, files: files, foto: photos.length, docCount: files.length,
+    not: (document.getElementById('g-not')||{value:''}).value
+  });
+  renderGKK(); renderDash();
+  closeModal('gkk-modal');
+  toast('GKK kaydı eklendi ✓');
+  ['g-ted','g-parti','g-miktar','g-nem','g-nem1','g-nem2','g-nem3','g-nem-min','g-nem-max','g-kayit','g-not'].forEach(function(id){var e=document.getElementById(id);if(e){e.value='';e.style.color='';e.style.background='';}});
+  ['g-photo-preview','g-doc-list','gkk-dim-rows'].forEach(function(id){var e=document.getElementById(id);if(e)e.innerHTML='';});
+  var ni=document.getElementById('g-nem-icon');if(ni)ni.textContent='';
+  var nr=document.getElementById('g-nem-result');if(nr)nr.style.display='none';
   _dimId = 0;
 }
 
->
+// ═══════════════════════════════════════════════════
+// renderGKK
+// ═══════════════════════════════════════════════════
+function renderGKK() {
+  var sv = (document.getElementById('gkk-search')||{value:''}).value.toLowerCase();
+  var af = (document.getElementById('gkk-af')||{value:''}).value;
+  var kf = (document.getElementById('gkk-kf')||{value:''}).value;
+  var d = gkkData.filter(function(r){
+    return (!sv||(r.a+r.ted+r.parti).toLowerCase().includes(sv)) && (!af||r.a===af) && (!kf||r.k===kf);
+  });
+  var tb = document.getElementById('gkk-tbody'); if (!tb) return;
+  tb.innerHTML = d.length ? d.map(function(r) {
+    var idx = gkkData.indexOf(r);
+    // Nem
+    var nc = r.nem>0 ? (r.nemOk===true?'var(--green)':r.nemOk===false?'var(--red)':'var(--amber)') : 'var(--muted)';
+    var nemH = r.nem > 0
+      ? ('<span style="font-weight:700;color:'+nc+'">' + (r.nemOk===true?'✓ ':r.nemOk===false?'✗ ':'') + r.nem + '%</span>')
+      : '—';
+    // Boyutlar
+    var dimH = '—';
+    if (r.dims && r.dims.length) {
+      var dFail = r.dims.filter(function(d){return d.ok===false;}).length;
+      var dOk   = r.dims.filter(function(d){return d.ok===true;}).length;
+      var dimTooltip = r.dims.map(function(d){return(d.name||'?')+': '+(d.olcum||'—')+'mm';}).join(' | ');
+      dimH = '<span class="badge '+(dFail>0?'br':dOk>0?'bg':'bgr')+'" title="'+dimTooltip+'" style="cursor:help">'+r.dims.length+' profil '+(dFail>0?'✗':'✓')+'</span>';
+    }
+    // Foto/dosya butonları
+    var fBtn = r.photos&&r.photos.length ? ('<button class="btn btn-sm" onclick="viewSavedPhotos(gkkData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> ') : '';
+    var dBtn = r.files&&r.files.length   ? ('<button class="btn btn-sm" onclick="viewGKKFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> ') : '';
+    var noM  = (!r.photos||!r.photos.length) && (!r.files||!r.files.length) ? '—' : '';
+    var delB = '<button class="btn btn-sm" onclick="delGKK('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00" title="Sil">🗑</button>';
+    return '<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.ted+'</td><td>'+r.parti+'</td><td>'+r.m+'</td>'
+      +'<td>'+nemH+'</td><td>'+dimH+'</td><td>'+badge(r.g)+'</td><td>'+badge(r.k)+'</td>'
+      +'<td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td><td>'+delB+'</td></tr>';
+  }).join('') : '<tr><td colspan="11" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz GKK kaydı yok</td></tr>';
+  var cnt = document.getElementById('gkk-count'); if (cnt) cnt.textContent = d.length + ' kayıt';
+}
+function delGKK(idx){if(confirm('Bu kaydı silmek istiyor musunuz?')){
+  var r=gkkData[idx];
+  if(r&&r._fbId&&window.fbDelete)fbDelete('gkk',r._fbId);
+  gkkData.splice(idx,1);renderGKK();renderDash();toast('Silindi ✓');}}
+function viewGKKFiles(idx){var r=gkkData[idx];if(r&&r.files&&r.files.length)viewSavedFiles(r.files,'GKK Belgeler');else toast('Belge yok');}
+
+// ═══════════════════════════════════════════════════
+// saveProses
+// ═══════════════════════════════════════════════════
+function saveProses() {
+  var n1=parseFloat((document.getElementById('p-nem1')||{}).value)||null;
+  var n2=parseFloat((document.getElementById('p-nem2')||{}).value)||null;
+  var n3=parseFloat((document.getElementById('p-nem3')||{}).value)||null;
+  var nArr=[n1,n2,n3].filter(function(v){return v!==null;});
+  var nemOrt=nArr.length?Math.round(nArr.reduce(function(a,b){return a+b;},0)/nArr.length*10)/10:null;
+  var nemMin=parseFloat((document.getElementById('p-nem-min')||{value:'4'}).value)||4;
+  var nemMax=parseFloat((document.getElementById('p-nem-max')||{value:'8'}).value)||8;
+  var nemOk=nemOrt!==null?(nemOrt>=nemMin&&nemOrt<=nemMax):null;
+
+  var params=_collectDimRows('proses-param-rows');
+  var fail=params.filter(function(p){return p.ok===false;}).length;
+  var sonuc=params.length?(fail>0?'Uygun Değil':'Uygun'):'Uygun';
+
+  var photos=collectPhotos('p-photo-preview');
+  var files=collectDocs('p-doc-list');
+
+  prosesData.unshift({
+    t:td0(),
+    a:(document.getElementById('p-agac')||{value:''}).value,
+    p:(document.getElementById('p-proses')||{value:''}).value,
+    parti:(document.getElementById('p-parti')||{value:''}).value||'',
+    op:(document.getElementById('p-op')||{value:'KM'}).value||'KM',
+    nem1:n1, nem2:n2, nem3:n3, nem:nemOrt,
+    nemMin:nemMin, nemMax:nemMax, nemOk:nemOk,
+    params:params, sonuc:sonuc,
+    photos:photos, files:files,
+    foto:photos.length, docCount:files.length,
+    not:(document.getElementById('p-not')||{value:''}).value||''
+  });
+
+  renderProses();closeModal('proses-modal');toast('Proses kaydı eklendi ✓');
+  if(window.fbSave)fbSave('proses',prosesData[0]).then(function(id){if(id)prosesData[0]._fbId=id;});
+
+  ['p-parti','p-op','p-not','p-nem1','p-nem2','p-nem3'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  var ne=document.getElementById('p-nem');if(ne){ne.value='';ne.style.color='';ne.style.background='';}
+  var ni=document.getElementById('p-nem-icon');if(ni)ni.textContent='';
+  var nr=document.getElementById('p-nem-result');if(nr)nr.style.display='none';
+  var pp=document.getElementById('p-photo-preview');if(pp)pp.innerHTML='';
+  var dl=document.getElementById('p-doc-list');if(dl)dl.innerHTML='';
+  var dr=document.getElementById('proses-param-rows');if(dr)dr.innerHTML='';
+  _dimId=0;
+}
+
+
+function renderProses() {
+  var fp = document.getElementById('p-fp'); var fpv = fp?fp.value:'';
+  var d = fpv ? prosesData.filter(function(r){return r.p===fpv;}) : prosesData;
+  var tb = document.getElementById('proses-tbody'); if (!tb) return;
+  tb.innerHTML = d.length ? d.map(function(r) {
+    var idx = prosesData.indexOf(r);
+    var paramH = '—';
+    if (r.params && r.params.length) {
+      var pFail = r.params.filter(function(p){return p.ok===false;}).length;
+      var pOk   = r.params.filter(function(p){return p.ok===true; }).length;
+      var pTip  = r.params.map(function(p){return(p.name||'?')+': '+(p.olcum||'—');}).join(' | ');
+      paramH = '<span class="badge '+(pFail>0?'br':pOk>0?'bg':'bgr')+'" title="'+pTip+'" style="cursor:help">'+r.params.length+' param '+(pFail>0?'✗':'✓')+'</span>';
+    }
+    var fBtn = r.photos&&r.photos.length ? ('<button class="btn btn-sm" onclick="viewSavedPhotos(prosesData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> ') : '';
+    var dBtn = r.files&&r.files.length   ? ('<button class="btn btn-sm" onclick="viewProsesFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> ') : '';
+    var noM  = (!r.photos||!r.photos.length)&&(!r.files||!r.files.length)?'—':'';
+    var delB = '<button class="btn btn-sm" onclick="delProses('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
+    return '<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.p+'</td><td>'+r.parti+'</td><td>'+paramH+'</td><td>'+badge(r.sonuc||'Uygun')+'</td><td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td><td>'+r.op+'</td><td>'+delB+'</td></tr>';
+  }).join('') : '<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz proses kaydı yok</td></tr>';
+  var cnt = document.getElementById('p-count'); if (cnt) cnt.textContent = d.length + ' kayıt';
+}
+function delProses(idx){if(confirm('Silinsin mi?')){
+  var r=prosesData[idx];
+  if(r&&r._fbId&&window.fbDelete)fbDelete('proses',r._fbId);
+  prosesData.splice(idx,1);renderProses();toast('Silindi ✓');}}
+function viewProsesFiles(idx){var r=prosesData[idx];if(r&&r.files&&r.files.length)viewSavedFiles(r.files,'Proses Belgeler');else toast('Belge yok');}
+
+// ═══════════════════════════════════════════════════
+// saveFinal
+// ═══════════════════════════════════════════════════
+function saveFinal() {
+  var n1=parseFloat((document.getElementById('f-nem1')||{}).value)||null;
+  var n2=parseFloat((document.getElementById('f-nem2')||{}).value)||null;
+  var n3=parseFloat((document.getElementById('f-nem3')||{}).value)||null;
+  var nArr=[n1,n2,n3].filter(function(v){return v!==null;});
+  var nemOrt=nArr.length?Math.round(nArr.reduce(function(a,b){return a+b;},0)/nArr.length*10)/10:null;
+  var nemMin=parseFloat((document.getElementById('f-nem-min')||{value:'4'}).value)||4;
+  var nemMax=parseFloat((document.getElementById('f-nem-max')||{value:'8'}).value)||8;
+  var nemOk=nemOrt!==null?(nemOrt>=nemMin&&nemOrt<=nemMax):null;
+
+  var dims=_collectDimRows('final-dim-rows');
+  var fail=dims.filter(function(d){return d.ok===false;}).length;
+  var boyutK=dims.length?(fail>0?'Uygun Değil':'Uygun'):'Uygun';
+
+  var photos=collectPhotos('f-photo-preview');
+  var files=collectDocs('f-doc-list');
+
+  finalData.unshift({
+    t:td0(),
+    a:(document.getElementById('f-agac')||{value:''}).value,
+    parti:(document.getElementById('f-parti')||{value:''}).value||'',
+    m:(document.getElementById('f-miktar')||{value:''}).value||'',
+    profil:(document.getElementById('f-profil')||{value:''}).value||'',
+    g:(document.getElementById('f-gorsel')||{value:'Uygun'}).value,
+    mu:(document.getElementById('f-musteri')||{value:'—'}).value,
+    k:(document.getElementById('f-karar')||{value:'Sevkiyat'}).value,
+    nem1:n1, nem2:n2, nem3:n3, nem:nemOrt,
+    nemMin:nemMin, nemMax:nemMax, nemOk:nemOk,
+    dims:dims, b:boyutK,
+    photos:photos, files:files,
+    foto:photos.length, docCount:files.length,
+    not:(document.getElementById('f-not')||{value:''}).value||''
+  });
+
+  renderFinal();closeModal('final-modal');toast('Final kaydı eklendi ✓');
+  if(window.fbSave)fbSave('final',finalData[0]).then(function(id){if(id)finalData[0]._fbId=id;});
+
+  ['f-parti','f-miktar','f-profil','f-not','f-nem1','f-nem2','f-nem3'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  var ne=document.getElementById('f-nem');if(ne){ne.value='';ne.style.color='';ne.style.background='';}
+  var ni=document.getElementById('f-nem-icon');if(ni)ni.textContent='';
+  var nr=document.getElementById('f-nem-result');if(nr)nr.style.display='none';
+  var pp=document.getElementById('f-photo-preview');if(pp)pp.innerHTML='';
+  var dl=document.getElementById('f-doc-list');if(dl)dl.innerHTML='';
+  var dr=document.getElementById('final-dim-rows');if(dr)dr.innerHTML='';
+  _dimId=0;
+}
+
+
+function renderFinal() {
+  var tb = document.getElementById('final-tbody'); if (!tb) return;
+  tb.innerHTML = finalData.length ? finalData.map(function(r) {
+    var idx = finalData.indexOf(r);
+    var dimH = '—';
+    if (r.dims && r.dims.length) {
+      var dF = r.dims.filter(function(d){return d.ok===false;}).length;
+      var dO = r.dims.filter(function(d){return d.ok===true;}).length;
+      var tip= r.dims.map(function(d){return(d.name||'?')+': '+(d.olcum||'—')+'mm';}).join(' | ');
+      dimH = '<span class="badge '+(dF>0?'br':dO>0?'bg':'bgr')+'" title="'+tip+'" style="cursor:help">'+r.dims.length+' nokta '+(dF>0?'✗':'✓')+'</span>';
+    }
+    var fBtn = r.photos&&r.photos.length ? ('<button class="btn btn-sm" onclick="viewSavedPhotos(finalData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> ') : '';
+    var dBtn = r.files&&r.files.length   ? ('<button class="btn btn-sm" onclick="viewFinalFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> ') : '';
+    var noM  = (!r.photos||!r.photos.length)&&(!r.files||!r.files.length)?'—':'';
+    var delB = '<button class="btn btn-sm" onclick="delFinal('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
+    return '<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.parti+'</td><td>'+r.m+'</td><td>'+r.profil+'</td><td>'+dimH+'</td><td>'+badge(r.g)+'</td><td>'+badge(r.k)+'</td><td>'+r.mu+'</td><td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td><td>'+delB+'</td></tr>';
+  }).join('') : '<tr><td colspan="11" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz final kaydı yok</td></tr>';
+}
+
+
+function viewDocFiles(idx){var r=docData[idx];if(r&&r.files&&r.files.length)viewSavedFiles(r.files,r.baslik+' Belgeler');else toast('Belge yok');}
+
+// collectPhotos yardımcısı
+function collectPhotos(previewId){
+  var prev=document.getElementById(previewId);if(!prev)return[];
+  return Array.from(prev.querySelectorAll('img')).map(function(img){return img.src;});
+}
+
+
+// ─── Genel nem hesaplama yardımcısı ───────────────────────
+function _calcNem(pfx) {
+  var vals = [pfx+'nem1', pfx+'nem2', pfx+'nem3'].map(function(id) {
+    return parseFloat((document.getElementById(id)||{}).value);
+  }).filter(function(v){ return !isNaN(v); });
+  var ortEl  = document.getElementById(pfx+'nem');
+  var icon   = document.getElementById(pfx+'nem-icon');
+  var resEl  = document.getElementById(pfx+'nem-result');
+  if (!vals.length) {
+    if (ortEl) { ortEl.value=''; ortEl.style.color=''; ortEl.style.background=''; }
+    if (icon)  icon.textContent='';
+    if (resEl) resEl.style.display='none';
+    return 0;
+  }
+  var ort = Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length*10)/10;
+  if (ortEl) ortEl.value = ort;
+  var mn = parseFloat((document.getElementById(pfx+'nem-min')||{value:'4'}).value)||4;
+  var mx = parseFloat((document.getElementById(pfx+'nem-max')||{value:'8'}).value)||8;
+  var ok = ort>=mn && ort<=mx;
+  if (ortEl) { ortEl.style.color=ok?'var(--green)':'var(--red)'; ortEl.style.background=ok?'#e8f7ef':'#fce8e8'; }
+  if (icon)  icon.textContent = ok ? '✅' : '❌';
+  if (resEl) {
+    resEl.style.display='block';
+    resEl.style.background=ok?'#dcf5ea':'#fce8e8';
+    resEl.style.color=ok?'#065f3a':'#7a0d0d';
+    resEl.textContent=ok?('✓ UYGUN — Ort: '+ort+'% ('+mn+'–'+mx+'%)'):('✗ UYGUNSUZ — Ort: '+ort+'% — Limit: '+mn+'–'+mx+'%');
+  }
+  return ort;
+}
+function calcNemGKK()    { _calcNem('g-'); }
+function calcNemProses() { _calcNem('p-'); }
+function calcNemFinal()  { _calcNem('f-'); }
+
+// ─── saveProses — nem + boyut + foto + dosya ──────────────
+function saveProses() {
+  var params  = _collectDimRows('proses-param-rows');
+  var fail    = params.filter(function(p){return p.ok===false;}).length;
+  var sonuc   = params.length ? (fail>0?'Uygun Değil':'Uygun') : 'Uygun';
+  calcNemProses();
+  var nem     = parseFloat((document.getElementById('p-nem')||{value:'0'}).value)||0;
+  var nemMin  = parseFloat((document.getElementById('p-nem-min')||{value:'4'}).value)||4;
+  var nemMax  = parseFloat((document.getElementById('p-nem-max')||{value:'8'}).value)||8;
+  var nemOk   = nem>0 ? (nem>=nemMin&&nem<=nemMax) : null;
+  var photos  = collectPhotos('p-photo-preview');
+  var files   = collectDocs('p-doc-list');
+  prosesData.unshift({
+    t:td0(), a:(document.getElementById('p-agac')||{value:''}).value,
+    p:(document.getElementById('p-proses')||{value:''}).value,
+    parti:(document.getElementById('p-parti')||{value:'—'}).value||'—',
+    op:(document.getElementById('p-op')||{value:'KM'}).value||'KM',
+    nem:nem, nem1:(document.getElementById('p-nem1')||{value:''}).value,
+    nem2:(document.getElementById('p-nem2')||{value:''}).value,
+    nem3:(document.getElementById('p-nem3')||{value:''}).value,
+    nemMin:nemMin, nemMax:nemMax, nemOk:nemOk,
+    params:params, sonuc:sonuc,
+    photos:photos, files:files, foto:photos.length, docCount:files.length,
+    not:(document.getElementById('p-not')||{value:''}).value
+  });
+  renderProses(); closeModal('proses-modal'); toast('Proses kaydı eklendi ✓');
+  ['p-parti','p-op','p-not','p-nem','p-nem1','p-nem2','p-nem3','p-nem-min','p-nem-max'].forEach(function(id){
+    var e=document.getElementById(id); if(e){e.value=(id==='p-nem-min'?'4':id==='p-nem-max'?'8':''); e.style.color=''; e.style.background='';}
+  });
+  ['p-photo-preview','p-doc-list','proses-param-rows'].forEach(function(id){var e=document.getElementById(id);if(e)e.innerHTML='';});
+  var ni=document.getElementById('p-nem-icon');if(ni)ni.textContent='';
+  var nr=document.getElementById('p-nem-result');if(nr)nr.style.display='none';
+}
+
+// ─── saveFinal — nem + boyut + foto + dosya ───────────────
+function saveFinal() {
+  var dims    = _collectDimRows('final-dim-rows');
+  var fail    = dims.filter(function(d){return d.ok===false;}).length;
+  var boyutK  = dims.length ? (fail>0?'Uygun Değil':'Uygun') : (document.getElementById('f-gorsel')||{value:'Uygun'}).value;
+  calcNemFinal();
+  var nem     = parseFloat((document.getElementById('f-nem')||{value:'0'}).value)||0;
+  var nemMin  = parseFloat((document.getElementById('f-nem-min')||{value:'4'}).value)||4;
+  var nemMax  = parseFloat((document.getElementById('f-nem-max')||{value:'8'}).value)||8;
+  var nemOk   = nem>0 ? (nem>=nemMin&&nem<=nemMax) : null;
+  var photos  = collectPhotos('f-photo-preview');
+  var files   = collectDocs('f-doc-list');
+  finalData.unshift({
+    t:td0(), a:(document.getElementById('f-agac')||{value:''}).value,
+    parti:(document.getElementById('f-parti')||{value:'—'}).value||'—',
+    m:(document.getElementById('f-miktar')||{value:'—'}).value||'—',
+    profil:(document.getElementById('f-profil')||{value:'—'}).value||'—',
+    g:(document.getElementById('f-gorsel')||{value:'Uygun'}).value,
+    mu:(document.getElementById('f-musteri')||{value:'—'}).value,
+    k:(document.getElementById('f-karar')||{value:'Sevkiyat'}).value,
+    nem:nem, nem1:(document.getElementById('f-nem1')||{value:''}).value,
+    nem2:(document.getElementById('f-nem2')||{value:''}).value,
+    nem3:(document.getElementById('f-nem3')||{value:''}).value,
+    nemMin:nemMin, nemMax:nemMax, nemOk:nemOk,
+    dims:dims, b:boyutK,
+    photos:photos, files:files, foto:photos.length, docCount:files.length,
+    not:(document.getElementById('f-not')||{value:''}).value
+  });
+  renderFinal(); closeModal('final-modal'); toast('Final kaydı eklendi ✓');
+  ['f-parti','f-miktar','f-profil','f-not','f-nem','f-nem1','f-nem2','f-nem3','f-nem-min','f-nem-max'].forEach(function(id){
+    var e=document.getElementById(id); if(e){e.value=(id==='f-nem-min'?'4':id==='f-nem-max'?'8':''); e.style.color=''; e.style.background='';}
+  });
+  ['f-photo-preview','f-doc-list','final-dim-rows'].forEach(function(id){var e=document.getElementById(id);if(e)e.innerHTML='';});
+  var ni=document.getElementById('f-nem-icon');if(ni)ni.textContent='';
+  var nr=document.getElementById('f-nem-result');if(nr)nr.style.display='none';
+}
+
+// ─── renderProses — nem + boyut göster ───────────────────
+function renderProses() {
+  var fp = document.getElementById('p-fp'); var fpv=fp?fp.value:'';
+  var d = fpv?prosesData.filter(function(r){return r.p===fpv;}):prosesData;
+  var tb = document.getElementById('proses-tbody'); if(!tb)return;
+  tb.innerHTML = d.length ? d.map(function(r){
+    var idx = prosesData.indexOf(r);
+    // Nem badge
+    var nc = r.nem>0?(r.nemOk===true?'var(--green)':r.nemOk===false?'var(--red)':'var(--amber)'):'var(--muted)';
+    var nemH = r.nem>0?('<span style="font-weight:700;color:'+nc+'">'+(r.nemOk===true?'✓ ':r.nemOk===false?'✗ ':'')+r.nem+'%</span>'):'—';
+    // Parametre badge
+    var paramH = '—';
+    if(r.params&&r.params.length){
+      var pF=r.params.filter(function(p){return p.ok===false;}).length;
+      var pO=r.params.filter(function(p){return p.ok===true;}).length;
+      var tip=r.params.map(function(p){return(p.name||'?')+': '+(p.olcum||'—');}).join(' | ');
+      paramH='<span class="badge '+(pF>0?'br':pO>0?'bg':'bgr')+'" title="'+tip+'" style="cursor:help">'+r.params.length+' param '+(pF>0?'✗':'✓')+'</span>';
+    }
+    var fBtn=r.photos&&r.photos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(prosesData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> '):'';
+    var dBtn=r.files&&r.files.length?('<button class="btn btn-sm" onclick="viewProsesFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> '):'';
+    var noM=(!r.photos||!r.photos.length)&&(!r.files||!r.files.length)?'—':'';
+    var delB='<button class="btn btn-sm" onclick="delProses('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
+    return'<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.p+'</td><td>'+r.parti+'</td><td>'+nemH+'</td><td>'+paramH+'</td><td>'+badge(r.sonuc||'Uygun')+'</td><td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td><td>'+r.op+'</td><td>'+delB+'</td></tr>';
+  }).join(''):'<tr><td colspan="10" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz proses kaydı yok</td></tr>';
+  var cnt=document.getElementById('p-count');if(cnt)cnt.textContent=d.length+' kayıt';
+}
+function delProses(idx){if(confirm('Silinsin mi?')){
+  var r=prosesData[idx];
+  if(r&&r._fbId&&window.fbDelete)fbDelete('proses',r._fbId);
+  prosesData.splice(idx,1);renderProses();toast('Silindi ✓');}}
+function viewProsesFiles(idx){var r=prosesData[idx];if(r&&r.files&&r.files.length)viewSavedFiles(r.files,'Proses Belgeler');else toast('Belge yok');}
+
+// ─── renderFinal — nem + boyut göster ────────────────────
+function renderFinal() {
+  var tb=document.getElementById('final-tbody');if(!tb)return;
+  tb.innerHTML=finalData.length?finalData.map(function(r){
+    var idx=finalData.indexOf(r);
+    var nc=r.nem>0?(r.nemOk===true?'var(--green)':r.nemOk===false?'var(--red)':'var(--amber)'):'var(--muted)';
+    var nemH=r.nem>0?('<span style="font-weight:700;color:'+nc+'">'+(r.nemOk===true?'✓ ':r.nemOk===false?'✗ ':'')+r.nem+'%</span>'):'—';
+    var dimH='—';
+    if(r.dims&&r.dims.length){
+      var dF=r.dims.filter(function(d){return d.ok===false;}).length;
+      var dO=r.dims.filter(function(d){return d.ok===true;}).length;
+      var tip=r.dims.map(function(d){return(d.name||'?')+': '+(d.olcum||'—')+'mm';}).join(' | ');
+      dimH='<span class="badge '+(dF>0?'br':dO>0?'bg':'bgr')+'" title="'+tip+'" style="cursor:help">'+r.dims.length+' nokta '+(dF>0?'✗':'✓')+'</span>';
+    }
+    var fBtn=r.photos&&r.photos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(finalData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> '):'';
+    var dBtn=r.files&&r.files.length?('<button class="btn btn-sm" onclick="viewFinalFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> '):'';
+    var noM=(!r.photos||!r.photos.length)&&(!r.files||!r.files.length)?'—':'';
+    var delB='<button class="btn btn-sm" onclick="delFinal('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
+    return'<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.parti+'</td><td>'+r.m+'</td><td>'+r.profil+'</td><td>'+nemH+'</td><td>'+dimH+'</td><td>'+badge(r.g)+'</td><td>'+badge(r.k)+'</td><td>'+r.mu+'</td><td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td><td>'+delB+'</td></tr>';
+  }).join(''):'<tr><td colspan="12" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz final kaydı yok</td></tr>';
+}
+function delFinal(idx){if(confirm('Silinsin mi?')){
+  var r=finalData[idx];
+  if(r&&r._fbId&&window.fbDelete)fbDelete('final',r._fbId);
+  finalData.splice(idx,1);renderFinal();toast('Silindi ✓');}}
+function viewFinalFiles(idx){var r=finalData[idx];if(r&&r.files&&r.files.length)viewSavedFiles(r.files,'Final Belgeler');else toast('Belge yok');}
+
+
+// ─── Kalibrasyon Vadesi Uyarı Sistemi ────────────────────
+function checkKalibUyari(){
+  var bugun=new Date();bugun.setHours(0,0,0,0);
+  var kritik=[];
+  var uyarilar=[];
+  kalibData.forEach(function(r){
+    if(!r.sonraki)return;
+    var snr=new Date(r.sonraki);snr.setHours(0,0,0,0);
+    var kalan=Math.ceil((snr-bugun)/(1000*60*60*24));
+    var uyari=r.uyariGun||30;
+    if(kalan<0)          kritik.push({r:r,kalan:kalan});
+    else if(kalan<=uyari) uyarilar.push({r:r,kalan:kalan});
+  });
+
+  // Sidebar nav'da ilgili menü item'ine kırmızı nokta ekle
+  var navItems=document.querySelectorAll('.nav-item');
+  navItems.forEach(function(ni){
+    if(ni.textContent&&ni.textContent.indexOf('Kalibrasyon')!==-1){
+      var dot=ni.querySelector('.kalib-alert');
+      if(kritik.length+uyarilar.length>0){
+        if(!dot){
+          dot=document.createElement('span');
+          dot.className='kalib-alert';
+          dot.style.cssText='background:'+(kritik.length>0?'var(--red)':'var(--amber)')+';color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;margin-left:6px';
+          ni.appendChild(dot);
+        }
+        dot.textContent=kritik.length+uyarilar.length;
+        dot.style.background=kritik.length>0?'var(--red)':'var(--amber)';
+      } else if(dot){
+        dot.remove();
+      }
+    }
+  });
+
+  // Toast uyarısı — sayfa açıldığında ve renderKalib her çağrıldığında
+  if(kritik.length>0&&!window._kalibUyariGosterildi){
+    window._kalibUyariGosterildi=true;
+    setTimeout(function(){
+      kritik.slice(0,3).forEach(function(u){
+        toast('🔴 KALİBRASYON VADESİ GEÇTİ: '+u.r.ad+' ('+u.r.no+') — '+Math.abs(u.kalan)+' gün önce!');
+      });
+    },800);
+  } else if(uyarilar.length>0&&!window._kalibUyariGosterildi){
+    window._kalibUyariGosterildi=true;
+    setTimeout(function(){
+      uyarilar.slice(0,3).forEach(function(u){
+        toast('⚠️ Kalibrasyon Yaklaşıyor: '+u.r.ad+' ('+u.r.no+') — '+u.kalan+' gün kaldı');
+      });
+    },800);
+  }
+}
+
+// Sayfa yüklenince ve her gün kontrol et
+function kalibGunlukKontrol(){
+  renderKalib(); // durum + uyarı güncelle
+  // Yarın tekrar kontrol
+  var yarinMidnight=new Date();
+  yarinMidnight.setDate(yarinMidnight.getDate()+1);
+  yarinMidnight.setHours(0,1,0,0);
+  var ms=yarinMidnight-new Date();
+  setTimeout(function(){window._kalibUyariGosterildi=false;kalibGunlukKontrol();},ms);
+}
+
+
+// ════════════════════════════════════════════════════════════
+// FİREBASE REAL-TIME LISTENERS
+// Her koleksiyon Firestore'dan anlık çekiliyor
+// ════════════════════════════════════════════════════════════
+function startFirebaseListeners(){
+  if(!window._fbReady){ console.warn('Firebase hazır değil'); return; }
+
+  // Toast göster
+  toast('🔥 Firebase bağlandı — veriler yükleniyor...');
+
+  // ── GKK ──────────────────────────────────────────────────
+  fbListen('gkk', function(docs){
+    gkkData = docs;
+    renderGKK(); renderDash();
+  });
+
+  // ── PROSES ───────────────────────────────────────────────
+  fbListen('proses', function(docs){
+    prosesData = docs;
+    renderProses();
+  });
+
+  // ── FİNAL ────────────────────────────────────────────────
+  fbListen('final', function(docs){
+    finalData = docs;
+    renderFinal();
+  });
+
+  // ── BURN BLOCK ───────────────────────────────────────────
+  fbListen('burn', function(docs){
+    burnData = docs;
+    renderBurn();
+  });
+
+  // ── KALİBRASYON ──────────────────────────────────────────
+  fbListen('kalib', function(docs){
+    kalibData = docs;
+    renderKalib();
+  });
+
+  // ── MSA ──────────────────────────────────────────────────
+  fbListen('msa', function(docs){
+    msaData = docs;
+    renderMSA();
+  });
+
+  // ── SPC ──────────────────────────────────────────────────
+  fbListen('spc', function(docs){
+    spcData = docs;
+    renderSPC();
+  });
+
+  // ── 8D ───────────────────────────────────────────────────
+  fbListen('8d', function(docs){
+    data8d = docs;
+    render8D();
+  });
+
+  // ── CAPA ─────────────────────────────────────────────────
+  fbListen('capa', function(docs){
+    capaData = docs;
+    renderCAPA();
+  });
+
+  // ── NCK ──────────────────────────────────────────────────
+  fbListen('nck', function(docs){
+    nckData = docs;
+    renderNCK();
+  });
+
+  // ── ŞİKAYET ──────────────────────────────────────────────
+  fbListen('sikayet', function(docs){
+    sikayetData = docs;
+    renderSikayet();
+  });
+
+  // ── TEDARİKÇİ ────────────────────────────────────────────
+  fbListen('ted', function(docs){
+    tedData = docs;
+    renderTed();
+  });
+
+  // ── SATIN ALMA ───────────────────────────────────────────
+  fbListen('satin', function(docs){
+    satinData = docs;
+    renderSatin();
+  });
+
+  // ── DOKÜMAN ──────────────────────────────────────────────
+  fbListen('dok', function(docs){
+    docData = docs;
+    renderDocs();
+  });
+
+  // ── EĞİTİM ───────────────────────────────────────────────
+  fbListen('egitim', function(docs){
+    egitimData = docs;
+    renderEgitim();
+  });
+
+  // ── RİSK ─────────────────────────────────────────────────
+  fbListen('risk', function(docs){
+    riskData = docs;
+    renderRisk();
+  });
+
+  // ── DENETİM ──────────────────────────────────────────────
+  fbListen('denetim', function(docs){
+    denetimData = docs;
+    renderDenetim();
+  });
+
+  // ── YGR ──────────────────────────────────────────────────
+  fbListen('ygr', function(docs){
+    ygrData = docs;
+    renderYGR();
+  });
+
+  // ── 5S ───────────────────────────────────────────────────
+  fbListen('5s', function(docs){
+    data5s = docs;
+    render5S();
+  });
+
+  // ── LOT ──────────────────────────────────────────────────
+  fbListen('lot', function(docs){
+    lotData = docs;
+    renderLot();
+  });
+
+  // ── ENERJİ ───────────────────────────────────────────────
+  fbListen('enerji', function(docs){
+    enerjiData = docs;
+    renderEnerji();
+  });
+
+  // ── BİLGİ ────────────────────────────────────────────────
+  fbListen('bilgi', function(docs){
+    bilgiData = docs;
+    renderBilgi();
+  });
+
+  console.log('✅ Tüm Firebase dinleyicileri başlatıldı');
+}
+
+// ════════════════════════════════════════════════════════════
+// KAYDET + SİL — Firebase entegrasyonlu yardımcılar
+// ════════════════════════════════════════════════════════════
+function fbSaveAndToast(colName, data, successMsg) {
+  if(window.fbSave) {
+    fbSave(colName, data).then(function(id){
+      if(id) toast('✅ ' + (successMsg||'Kaydedildi') + ' (Firebase)');
+      else   toast('⚠️ Yerel kaydedildi, Firebase hatası');
+    });
+  }
+}
+
+function fbDeleteAndRefresh(colName, fbId, localArr, renderFn) {
+  if(!fbId){ toast('Firebase ID bulunamadı'); return; }
+  fbDelete(colName, fbId).then(function(ok){
+    if(ok) toast('🗑 Silindi');
+    else   toast('Silme hatası');
+  });
+}
+
+window.onload=function(){
+  renderDash();renderGKK();renderProses();renderFinal();renderBurn();
+  kalibGunlukKontrol();renderMSA();renderSPC();render8D();renderCAPA();
+  renderNCK();renderSikayet();renderTed();renderSatin();renderDocs();
+  renderEgitim();renderRisk();renderDenetim();renderYGR();renderKPI();
+  render5S();renderLot();renderEnerji();renderBilgi();renderUsers();
+  showAkis('Ayous Kereste',null);
+  // Firebase başlat
+  if(window._fbReady) startFirebaseListeners();
+};
+
+</script>
+</body>
+</html>
