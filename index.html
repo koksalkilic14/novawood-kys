@@ -1830,7 +1830,7 @@ function renderGKK(){
     var nemStr=r.nem>0?('<span style="font-weight:600;color:'+nc+'">'+(r.nemOk===true?'✓ ':r.nemOk===false?'✗ ':'')+r.nem+'%</span>'):'—';
     var dimH='—';
     if(r.dims&&r.dims.length){var dF=r.dims.filter(function(d){return d.ok===false;}).length;var dO=r.dims.filter(function(d){return d.ok===true;}).length;dimH='<span class="badge '+(dF>0?'br':dO>0?'bg':'bgr')+'">'+r.dims.length+' profil '+(dF>0?'✗':'✓')+'</span>';}
-    var fBtn=r.photos&&r.photos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(gkkData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> '):'';
+    var rPhotos=r.photos&&r.photos.length?r.photos:(r.photoUrls||[]);var fBtn=rPhotos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(gkkData['+idx+'].photos||gkkData['+idx+'].photoUrls||[])" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> '):'';
     var dBtn=r.files&&r.files.length?('<button class="btn btn-sm" onclick="viewGKKFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> '):'';
     var noM=(!r.photos||!r.photos.length)&&(!r.files||!r.files.length)?'—':'';
     var delB='<button class="btn btn-sm" onclick="delGKK('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
@@ -1885,8 +1885,16 @@ function saveGKK(){
   // Firebase'e kaydet
   if(window.fbSave){
     var dataToSave = Object.assign({}, gkkData[0]);
-    delete dataToSave.photos; // base64 çok büyük, URL'leri kaydet
-    dataToSave.photoUrls = gkkData[0].photos || [];
+    // Cloudinary URL'leri varsa kaydet, yoksa base64'ü kaydet (küçükse)
+    var photosToSave = (gkkData[0].photos||[]).map(function(p){
+      // Cloudinary URL'si ise direkt kaydet
+      if(p && p.startsWith('http')) return p;
+      // base64 ise boyutu kontrol et (100KB'dan küçükse kaydet)
+      if(p && p.length < 150000) return p;
+      return null;
+    }).filter(Boolean);
+    dataToSave.photos = photosToSave;
+    dataToSave.photoUrls = photosToSave;
     fbSave('gkk', dataToSave).then(function(id){
       if(id){ gkkData[0]._fbId = id; console.log('GKK Firebase kaydedildi:', id); }
       else { console.error('GKK Firebase kayıt başarısız'); }
