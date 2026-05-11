@@ -1819,25 +1819,54 @@ function viewGKKFiles(idx){var r=gkkData[idx];if(r&&r.files&&r.files.length)view
 
 
 function renderGKK(){
-  var s=(document.getElementById('gkk-search')||{value:''}).value.toLowerCase();
+  var sv=(document.getElementById('gkk-search')||{value:''}).value.toLowerCase();
   var af=(document.getElementById('gkk-af')||{value:''}).value;
   var kf=(document.getElementById('gkk-kf')||{value:''}).value;
-  var d=gkkData.filter(function(r){return(!s||(r.a+r.ted+r.parti).toLowerCase().includes(s))&&(!af||r.a===af)&&(!kf||r.k===kf);});
-  var tbody=document.getElementById('gkk-tbody');if(!tbody)return;
-  tbody.innerHTML=d.length?d.map(function(r){
+  var d=gkkData.filter(function(r){
+    return(!sv||((r.a||'')+(r.ted||'')+(r.parti||'')).toLowerCase().includes(sv))
+      &&(!af||r.a===af)&&(!kf||r.k===kf);
+  });
+  var tb=document.getElementById('gkk-tbody');if(!tb)return;
+  tb.innerHTML=d.length?d.map(function(r){
     var idx=gkkData.indexOf(r);
-    var nc=r.nem>0?(r.nem>=4&&r.nem<=8?'var(--green)':r.nem>8.5?'var(--red)':'var(--amber)'):'var(--muted)';
-    var nemStr=r.nem>0?('<span style="font-weight:600;color:'+nc+'">'+(r.nemOk===true?'✓ ':r.nemOk===false?'✗ ':'')+r.nem+'%</span>'):'—';
+    // Nem
+    var nem=parseFloat(r.nem)||0;
+    var nemOk=r.nemOk;
+    var nc=nemOk===true?'var(--green)':nemOk===false?'var(--red)':'var(--amber)';
+    var nemH=nem>0?('<span style="font-weight:700;color:'+nc+'">'+(nemOk===true?'✓ ':nemOk===false?'✗ ':'')+nem+'%</span>'):'—';
+    // Boyutlar
+    var dims=r.dims||[];
     var dimH='—';
-    if(r.dims&&r.dims.length){var dF=r.dims.filter(function(d){return d.ok===false;}).length;var dO=r.dims.filter(function(d){return d.ok===true;}).length;dimH='<span class="badge '+(dF>0?'br':dO>0?'bg':'bgr')+'">'+r.dims.length+' profil '+(dF>0?'✗':'✓')+'</span>';}
-    var rPhotos=r.photos&&r.photos.length?r.photos:(r.photoUrls||[]);var fBtn=rPhotos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(gkkData['+idx+'].photos||gkkData['+idx+'].photoUrls||[])" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> '):'';
-    var dBtn=r.files&&r.files.length?('<button class="btn btn-sm" onclick="viewGKKFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> '):'';
-    var noM=(!r.photos||!r.photos.length)&&(!r.files||!r.files.length)?'—':'';
-    var delB='<button class="btn btn-sm" onclick="delGKK('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
-    return'<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.ted+'</td><td>'+r.parti+'</td><td>'+r.m+'</td><td>'+nemStr+'</td><td>'+badge(r.g)+'</td><td>'+dimH+'</td><td>'+badge(r.k)+'</td><td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td><td>'+delB+'</td></tr>';
+    if(dims.length){
+      var dF=dims.filter(function(d){return d&&d.ok===false;}).length;
+      var dO=dims.filter(function(d){return d&&d.ok===true;}).length;
+      var tip=dims.map(function(d){return d?(d.name||'?')+': '+(d.olcum||'—')+'mm':'';}).join(' | ');
+      dimH='<span class="badge '+(dF>0?'br':dO>0?'bg':'bgr')+'" title="'+tip+'" style="cursor:help">'+dims.length+' profil '+(dF>0?'✗':'✓')+'</span>';
+    }
+    // Foto/Dosya — photos veya photoUrls
+    var photos=(r.photos&&r.photos.length)?r.photos:(r.photoUrls||[]);
+    var files=r.files||[];
+    var fBtn=photos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(gkkData['+idx+'].photos||gkkData['+idx+'].photoUrls||[])" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+photos.length+'</button> '):'';
+    var dBtn=files.length?('<button class="btn btn-sm" onclick="viewGKKFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+files.length+'</button> '):'';
+    var noM=!photos.length&&!files.length?'—':'';
+    var delB='<button class="btn btn-sm" onclick="delGKK('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00" title="Sil">🗑</button>';
+    return'<tr>'
+      +'<td>'+(r.t?r.t.split('-').reverse().join('.'):'—')+'</td>'
+      +'<td>'+(r.a||'—')+'</td>'
+      +'<td>'+(r.ted||'—')+'</td>'
+      +'<td>'+(r.parti||'—')+'</td>'
+      +'<td>'+(r.m||'—')+'</td>'
+      +'<td>'+nemH+'</td>'
+      +'<td>'+dimH+'</td>'
+      +'<td>'+badge(r.g||'—')+'</td>'
+      +'<td>'+badge(r.k||'—')+'</td>'
+      +'<td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td>'
+      +'<td>'+delB+'</td>'
+      +'</tr>';
   }).join(''):'<tr><td colspan="11" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz GKK kaydı yok</td></tr>';
   var cnt=document.getElementById('gkk-count');if(cnt)cnt.textContent=d.length+' kayıt';
 }
+
 function delGKK(idx){if(confirm('Kaydı silmek istiyor musunuz?')){gkkData.splice(idx,1);renderGKK();renderDash();toast('Silindi ✓');}}
 
 function saveGKK(){
