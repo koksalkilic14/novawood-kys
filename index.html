@@ -1918,6 +1918,23 @@ textarea.fi{resize:vertical;min-height:64px}
 <div class="toast" id="toast"></div>
 
 <script>
+// ─── Cloudinary Config ───────────────────────────────────────
+var CLOUDINARY_CLOUD = "dfb9z5efp";
+var CLOUDINARY_PRESET = "novawood_kys";
+
+async function uploadToCloudinary(file) {
+  var fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLOUDINARY_PRESET);
+  fd.append('folder', 'novawood-kys');
+  try {
+    var res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', {method:'POST',body:fd});
+    var d = await res.json();
+    return d.secure_url || null;
+  } catch(e) { console.error('Cloudinary hata:', e); return null; }
+}
+
+
 // ============ DATA ============
 var gkkData=[];
 var prosesData=[];
