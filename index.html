@@ -2002,7 +2002,7 @@ function handlePhotos(input,previewId){
     reader.onload=function(e){
       var img=new Image();
       img.onload=function(){
-        // Önce küçük thumbnail göster
+        // Canvas ile küçült
         var canvas=document.createElement('canvas');
         var mw=800,mh=800,w=img.width,h=img.height;
         if(w>mw){h=Math.round(h*mw/w);w=mw;}
@@ -2011,52 +2011,66 @@ function handlePhotos(input,previewId){
         canvas.getContext('2d').drawImage(img,0,0,w,h);
         var localSrc=canvas.toDataURL('image/jpeg',0.75);
 
+        // Thumbnail container
         var wrap=document.createElement('div');
         wrap.style.cssText='position:relative;display:inline-block;margin:2px';
+
+        // Thumbnail img
         var thumb=document.createElement('img');
-        thumb.src=localSrc;thumb.className='photo-thumb';
-        thumb.style.cursor='zoom-in';thumb.title='Yükleniyor...';
+        thumb.src=localSrc;
+        thumb.className='photo-thumb';
+        thumb.style.cssText='width:70px;height:70px;object-fit:cover;border-radius:5px;cursor:zoom-in;border:2px solid #e0e0e0';
         thumb.dataset.localSrc=localSrc;
-        thumb.dataset.cloudUrl=''; // Cloudinary URL sonra gelecek
+        thumb.dataset.cloudUrl='';
         thumb.onclick=function(){
           var src=thumb.dataset.cloudUrl||thumb.dataset.localSrc;
           openPhotoViewer([{src:src,name:file.name}],0);
         };
 
-        // Yükleniyor göstergesi
+        // Yükleniyor spinner
         var spinner=document.createElement('div');
         spinner.style.cssText='position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px';
         spinner.textContent='⏳';
-        wrap.appendChild(thumb);wrap.appendChild(spinner);
 
+        // Sil butonu
         var del=document.createElement('button');
-        del.innerHTML='&times;';del.title='Kaldır';
-        del.style.cssText='position:absolute;top:-5px;right:-5px;background:#a32d2d;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;z-index:2;line-height:1';
+        del.innerHTML='&times;';
+        del.style.cssText='position:absolute;top:-5px;right:-5px;background:#a32d2d;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;line-height:1;padding:0;z-index:2';
         del.onclick=function(e){e.stopPropagation();wrap.remove();};
+
+        wrap.appendChild(thumb);
+        wrap.appendChild(spinner);
         wrap.appendChild(del);
         preview.appendChild(wrap);
 
-        // Cloudinary'e yükle
-        if(window.uploadToCloudinary){
-          // Canvas'tan blob oluştur
-          canvas.toBlob(function(blob){
-            var uploadFile=new File([blob],file.name,{type:'image/jpeg'});
-            uploadToCloudinary(uploadFile).then(function(url){
-              if(url){
-                thumb.dataset.cloudUrl=url;
-                thumb.src=url; // Cloudinary URL'ini kullan
-                thumb.title='Büyütmek için tıkla: '+file.name;
+        // Cloudinary'e yükle — Promise ile
+        canvas.toBlob(function(blob){
+          var uploadFile=new File([blob],file.name,{type:'image/jpeg'});
+          // Promise tabanlı upload
+          var fd=new FormData();
+          fd.append('file',uploadFile);
+          fd.append('upload_preset','novawood_kys');
+          fd.append('folder','novawood-kys');
+          fetch('https://api.cloudinary.com/v1_1/dfb9z5efp/image/upload',{method:'POST',body:fd})
+            .then(function(res){return res.json();})
+            .then(function(data){
+              if(data.secure_url){
+                thumb.dataset.cloudUrl=data.secure_url;
+                thumb.src=data.secure_url;
+                thumb.style.border='2px solid #1d9e75';
                 spinner.textContent='✅';
-                setTimeout(function(){spinner.remove();},2000);
+                setTimeout(function(){if(spinner.parentNode)spinner.remove();},2000);
+                console.log('Cloudinary ✅', data.secure_url);
               } else {
                 spinner.textContent='⚠️';
-                spinner.title='Cloudinary yükleme başarısız, yerel kullanılıyor';
+                console.warn('Cloudinary hata:', data);
               }
+            })
+            .catch(function(err){
+              spinner.textContent='📷';
+              console.warn('Cloudinary bağlantı hatası:', err);
             });
-          },'image/jpeg',0.75);
-        } else {
-          spinner.remove();
-        }
+        },'image/jpeg',0.75);
       };
       img.src=e.target.result;
     };
