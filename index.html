@@ -1266,7 +1266,24 @@ textarea.fi{resize:vertical;min-height:64px}
     </div>
     <div class="fg"><label class="fl">Not</label><textarea class="fi" id="b-not"></textarea></div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('burn-modal')">İptal</button><button class="btn btn-p" onclick="saveBurn()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('b-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="b-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="b-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'b-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('b-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="b-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="b-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'b-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('burn-modal')">İptal</button><button class="btn btn-p" onclick="saveBurn()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- KALİBRASYON MODAL -->
@@ -1324,7 +1341,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Sorumlu</label><input class="fi" id="m-sor" placeholder="Ad Soyad"></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('msa-modal')">İptal</button><button class="btn btn-p" onclick="saveMSA()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('msa-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="msa-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="msa-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'msa-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('msa-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="msa-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="msa-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'msa-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('msa-modal')">İptal</button><button class="btn btn-p" onclick="saveMSA()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- SPC MODAL -->
@@ -1339,7 +1373,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Ölçüm 3</label><input class="fi" id="spc-3" type="number" step="0.01"></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('spc-modal')">İptal</button><button class="btn btn-p" onclick="saveSPC()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('spc-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="spc-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="spc-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'spc-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('spc-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="spc-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="spc-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'spc-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('spc-modal')">İptal</button><button class="btn btn-p" onclick="saveSPC()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- 8D MODAL -->
@@ -1355,7 +1406,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg full"><label class="fl">D3: Acil Önlem</label><input class="fi" id="d-acil" placeholder="Kısa vadeli koruma aksiyonu..."></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('8d-modal')">İptal</button><button class="btn btn-p" onclick="save8D()">&#10003; Dosya Aç</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('d8-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="d8-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="d8-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'d8-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('d8-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="d8-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="d8-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'d8-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('8d-modal')">İptal</button><button class="btn btn-p" onclick="save8D()">&#10003; Dosya Aç</button></div>
 </div></div>
 
 <!-- CAPA MODAL -->
@@ -1372,7 +1440,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Sorumlu</label><input class="fi" id="ca-sor" placeholder="Ad Soyad"></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('capa-modal')">İptal</button><button class="btn btn-p" onclick="saveCAPA()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('capa-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="capa-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="capa-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'capa-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('capa-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="capa-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="capa-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'capa-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('capa-modal')">İptal</button><button class="btn btn-p" onclick="saveCAPA()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- NCK MODAL -->
@@ -1388,7 +1473,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Sorumlu</label><input class="fi" id="n-sor" placeholder="Ad Soyad"></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('nck-modal')">İptal</button><button class="btn btn-p" onclick="saveNCK()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('nck-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="nck-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="nck-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'nck-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('nck-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="nck-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="nck-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'nck-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('nck-modal')">İptal</button><button class="btn btn-p" onclick="saveNCK()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- ŞİKAYET MODAL -->
@@ -1405,7 +1507,24 @@ textarea.fi{resize:vertical;min-height:64px}
     </div>
     <div class="fg"><label class="fl">Şikayet Detayı</label><textarea class="fi" id="s-detay"></textarea></div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('sikayet-modal')">İptal</button><button class="btn btn-p" onclick="saveSikayet()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('sik-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="sik-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="sik-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'sik-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('sik-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="sik-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="sik-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'sik-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('sikayet-modal')">İptal</button><button class="btn btn-p" onclick="saveSikayet()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- TEDARİKÇİ MODAL -->
@@ -1421,7 +1540,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Durum</label><select class="fi" id="t-durum"><option>Onaylı</option><option>Koşullu</option><option>Askıda</option><option>Kara Liste</option></select></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('ted-modal')">İptal</button><button class="btn btn-p" onclick="saveTed()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('ted-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="ted-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="ted-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'ted-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('ted-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="ted-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="ted-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'ted-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('ted-modal')">İptal</button><button class="btn btn-p" onclick="saveTed()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- SATIN ALMA MODAL -->
@@ -1437,7 +1573,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">GKK Sonucu</label><select class="fi" id="sa-gkk"><option>Kabul</option><option>Ret</option><option>Bekliyor</option></select></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('satin-modal')">İptal</button><button class="btn btn-p" onclick="saveSatin()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('satin-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="satin-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="satin-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'satin-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('satin-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="satin-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="satin-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'satin-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('satin-modal')">İptal</button><button class="btn btn-p" onclick="saveSatin()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- DOKÜMAN MODAL -->
@@ -1462,7 +1615,24 @@ textarea.fi{resize:vertical;min-height:64px}
       </div>
       <input type="file" id="doc-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" style="display:none" onchange="handleDocs(this,'doc-file-list')">
     </div>
-  <div class="mf"><button class="btn" onclick="closeModal('doc-modal')">İptal</button><button class="btn btn-p" onclick="saveDoc()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('doc-ph-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="doc-ph-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="doc-ph-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'doc-ph-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('doc-ph-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="doc-ph-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="doc-ph-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'doc-ph-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('doc-modal')">İptal</button><button class="btn btn-p" onclick="saveDoc()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- EĞİTİM MODAL -->
@@ -1480,7 +1650,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Tamamlama %</label><input class="fi" id="eg-pct" type="number" min="0" max="100" placeholder="100"></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('egitim-modal')">İptal</button><button class="btn btn-p" onclick="saveEgitim()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('egitim-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="egitim-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="egitim-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'egitim-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('egitim-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="egitim-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="egitim-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'egitim-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('egitim-modal')">İptal</button><button class="btn btn-p" onclick="saveEgitim()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- RİSK MODAL -->
@@ -1497,7 +1684,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Sorumlu</label><input class="fi" id="r-sor" placeholder="Ad Soyad"></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('risk-modal')">İptal</button><button class="btn btn-p" onclick="saveRisk()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('risk-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="risk-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="risk-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'risk-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('risk-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="risk-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="risk-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'risk-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('risk-modal')">İptal</button><button class="btn btn-p" onclick="saveRisk()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- DENETİM MODAL -->
@@ -1512,7 +1716,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg full"><label class="fl">Denetim Odak Noktaları</label><textarea class="fi" id="dn-not" placeholder="Kontrol edilecek konular..."></textarea></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('denetim-modal')">İptal</button><button class="btn btn-p" onclick="saveDenetim()">&#10003; Planla</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('denet-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="denet-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="denet-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'denet-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('denet-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="denet-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="denet-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'denet-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('denetim-modal')">İptal</button><button class="btn btn-p" onclick="saveDenetim()">&#10003; Planla</button></div>
 </div></div>
 
 <!-- YGR MODAL -->
@@ -1525,7 +1746,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg full"><label class="fl">Gündem Maddeleri</label><textarea class="fi" id="y-gundem" placeholder="KPI raporu, önceki kararlar, hedefler..."></textarea></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('ygr-modal')">İptal</button><button class="btn btn-p" onclick="saveYGR()">&#10003; Planla</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('ygr-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="ygr-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="ygr-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'ygr-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('ygr-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="ygr-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="ygr-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'ygr-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('ygr-modal')">İptal</button><button class="btn btn-p" onclick="saveYGR()">&#10003; Planla</button></div>
 </div></div>
 
 <!-- 5S MODAL -->
@@ -1543,7 +1781,24 @@ textarea.fi{resize:vertical;min-height:64px}
     </div>
     <div class="fg"><label class="fl">Bulgular / Notlar</label><textarea class="fi" id="s-not"></textarea></div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('5s-modal')">İptal</button><button class="btn btn-p" onclick="save5S()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('s5-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="s5-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="s5-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'s5-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('s5-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="s5-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="s5-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'s5-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('5s-modal')">İptal</button><button class="btn btn-p" onclick="save5S()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- LOT MODAL -->
@@ -1561,7 +1816,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Sevkiyat Tarihi</label><input class="fi" id="l-sevk" type="date"></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('lot-modal')">İptal</button><button class="btn btn-p" onclick="saveLot()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('lot-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="lot-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="lot-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'lot-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('lot-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="lot-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="lot-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'lot-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('lot-modal')">İptal</button><button class="btn btn-p" onclick="saveLot()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- ENERJİ MODAL -->
@@ -1577,7 +1849,24 @@ textarea.fi{resize:vertical;min-height:64px}
       <div class="fg"><label class="fl">Geri Dönüşüm (kg)</label><input class="fi" id="en-geri" type="number" step="0.1" placeholder="60"></div>
     </div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('enerji-modal')">İptal</button><button class="btn btn-p" onclick="saveEnerji()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('enerji-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="enerji-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="enerji-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'enerji-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('enerji-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="enerji-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="enerji-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'enerji-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('enerji-modal')">İptal</button><button class="btn btn-p" onclick="saveEnerji()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- BİLGİ MODAL -->
@@ -1592,7 +1881,24 @@ textarea.fi{resize:vertical;min-height:64px}
     </div>
     <div class="fg"><label class="fl">İçerik / Özet</label><textarea class="fi" id="bi-icerik" placeholder="Bilginin içeriği veya özeti..."></textarea></div>
   </div>
-  <div class="mf"><button class="btn" onclick="closeModal('bilgi-modal')">İptal</button><button class="btn btn-p" onclick="saveBilgi()">&#10003; Kaydet</button></div>
+  
+    <div class="fg"><label class="fl">📷 Fotoğraf (büyütülebilir, kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('bilgi-photos').click()" style="cursor:pointer">
+        <div style="font-size:18px">📷</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Fotoğraf ekle — Cloudinary'e yüklenir</div>
+        <div class="photo-preview" id="bilgi-photo-preview" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+      <input type="file" id="bilgi-photos" multiple accept="image/*" style="display:none" onchange="handlePhotos(this,'bilgi-photo-preview')">
+    </div>
+    <div class="fg"><label class="fl">📎 Belge (PDF/Word/Excel — kalıcı)</label>
+      <div class="photo-zone" onclick="document.getElementById('bilgi-docs').click()" style="cursor:pointer;background:#f8f8ff;border-color:#c5d4f5">
+        <div style="font-size:14px">📎</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Dosya ekle — PDF aynı sayfada açılır</div>
+        <div id="bilgi-doc-list" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+      <input type="file" id="bilgi-docs" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleDocs(this,'bilgi-doc-list')">
+    </div>
+    <div class="mf"><button class="btn" onclick="closeModal('bilgi-modal')">İptal</button><button class="btn btn-p" onclick="saveBilgi()">&#10003; Kaydet</button></div>
 </div></div>
 
 <!-- USER MODAL -->
@@ -2036,6 +2342,7 @@ function renderBurn(){
 function saveBurn(){
   burnData.unshift({t:td0(),a:document.getElementById('b-agac').value,parti:document.getElementById('b-parti').value||'BB-'+Date.now(),renk:document.getElementById('b-renk').value,ruyg:document.getElementById('b-ruyg').value,yuz:document.getElementById('b-yuz').value,nem:parseFloat(document.getElementById('b-nem').value)||0,foto:document.getElementById('b-photo-preview').children.length});
   renderBurn();closeModal('burn-modal');toast('Burn Block kaydı eklendi.');
+  if(window.fbSave){var _d=Object.assign({},burnData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('burn',_d).then(function(id){if(id)burnData[0]._fbId=id;});}
   clr(['b-parti','b-nem','b-not']);
   document.getElementById('b-photo-preview').innerHTML='';
 }
@@ -2152,8 +2459,11 @@ function renderMSA(){
 function saveMSA(){
   if(!document.getElementById('m-cihaz').value){toast('Cihaz adı zorunlu!');return;}
   var rr=parseFloat(document.getElementById('m-rr').value)||0;
+    var _photos=collectPhotos('msa-photo-preview');
+  var _files=collectDocs('msa-doc-list');
   msaData.unshift({t:td0(),c:document.getElementById('m-cihaz').value,kar:document.getElementById('m-kar').value||'—',tur:document.getElementById('m-tur').value,op:parseInt(document.getElementById('m-op').value)||3,rr:rr,ndc:parseInt(document.getElementById('m-ndc').value)||0,karar:rr<10?'Yeterli':rr<30?'Sınırda':'Yetersiz',sor:document.getElementById('m-sor').value||'KM'});
   renderMSA();closeModal('msa-modal');toast('MSA çalışması kaydedildi.');
+  if(window.fbSave){var _d=Object.assign({},msaData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('msa',_d).then(function(id){if(id)msaData[0]._fbId=id;});}
   clr(['m-cihaz','m-kar','m-rr','m-ndc','m-op','m-sor']);
 }
 
@@ -2166,8 +2476,11 @@ function saveSPC(){
   var o2=parseFloat(document.getElementById('spc-2').value)||0;
   var o3=parseFloat(document.getElementById('spc-3').value)||0;
   var ort=Math.round((o1+o2+o3)/3*100)/100;
+    var _photos=collectPhotos('spc-photo-preview');
+  var _files=collectDocs('spc-doc-list');
   spcData.unshift({t:td0(),kar:document.getElementById('spc-kar').value,o1:o1,o2:o2,o3:o3,ort:ort,du:'Normal',op:document.getElementById('spc-op').value||'KM'});
   renderSPC();closeModal('spc-modal');toast('SPC verisi kaydedildi.');
+  if(window.fbSave){var _d=Object.assign({},spcData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('spc',_d).then(function(id){if(id)spcData[0]._fbId=id;});}
   clr(['spc-1','spc-2','spc-3','spc-op']);
 }
 
@@ -2180,8 +2493,11 @@ function render8D(){
 }
 function save8D(){
   if(!document.getElementById('d-prob').value){toast('Problem tanımı zorunlu!');return;}
+    var _photos=collectPhotos('d8-photo-preview');
+  var _files=collectDocs('d8-doc-list');
   data8d.unshift({no:'8D-0'+nextId8d++,t:td0(),prob:document.getElementById('d-prob').value,a:document.getElementById('d-agac').value,p:document.getElementById('d-proses').value,on:document.getElementById('d-oncelik').value,sor:document.getElementById('d-sor').value||'KM',acil:document.getElementById('d-acil').value,du:'Açıldı'});
   render8D();renderDash();closeModal('8d-modal');toast('8D dosyası açıldı.');
+  if(window.fbSave){var _d=Object.assign({},data8d[0]);delete _d.photos;_d.photos=_photos||[];fbSave('8d',_d).then(function(id){if(id)data8d[0]._fbId=id;});}
   clr(['d-prob','d-sor','d-acil']);
 }
 function kapat8D(no){var r=data8d.find(function(x){return x.no===no;});if(r){r.du='Kapandı';render8D();renderDash();toast(no+' kapatıldı.');}}
@@ -2194,8 +2510,11 @@ function renderCAPA(){
 }
 function saveCAPA(){
   if(!document.getElementById('ca-prob').value){toast('Uygunsuzluk tanımı zorunlu!');return;}
+    var _photos=collectPhotos('capa-photo-preview');
+  var _files=collectDocs('capa-doc-list');
   capaData.unshift({no:'CAPA-0'+nextCapa++,t:td0(),tip:document.getElementById('ca-tip').value,kaynak:document.getElementById('ca-kaynak').value,prob:document.getElementById('ca-prob').value,kok:document.getElementById('ca-kok').value||'—',faal:document.getElementById('ca-faal').value||'—',son:document.getElementById('ca-son').value||'—',sor:document.getElementById('ca-sor').value||'KM',du:'Açık'});
   renderCAPA();closeModal('capa-modal');toast('CAPA kaydı açıldı.');
+  if(window.fbSave){var _d=Object.assign({},capaData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('capa',_d).then(function(id){if(id)capaData[0]._fbId=id;});}
   clr(['ca-prob','ca-kok','ca-faal','ca-son','ca-sor']);
 }
 
@@ -2205,8 +2524,11 @@ function renderNCK(){
 }
 function saveNCK(){
   if(!document.getElementById('n-uyg').value){toast('Uygunsuzluk tanımı zorunlu!');return;}
+    var _photos=collectPhotos('nck-photo-preview');
+  var _files=collectDocs('nck-doc-list');
   nckData.unshift({no:'NCR-0'+nextNCR++,t:td0(),a:document.getElementById('n-agac').value,parti:document.getElementById('n-parti').value||'—',uyg:document.getElementById('n-uyg').value,kar:document.getElementById('n-kar').value,karar:document.getElementById('n-karar').value,sor:document.getElementById('n-sor').value||'KM',du:'Açık'});
   renderNCK();closeModal('nck-modal');toast('NCR kaydı oluşturuldu.');
+  if(window.fbSave){var _d=Object.assign({},nckData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('nck',_d).then(function(id){if(id)nckData[0]._fbId=id;});}
   clr(['n-parti','n-uyg','n-sor']);
 }
 
@@ -2214,11 +2536,15 @@ function renderSikayet(){
   var tbody=document.getElementById('sikayet-tbody');if(!tbody)return;
   tbody.innerHTML=sikayetData.map(function(r){return'<tr><td style="font-weight:700;color:var(--amber)">'+r.no+'</td><td>'+fd(r.t)+'</td><td>'+r.musteri+'</td><td>'+r.konu+'</td><td>'+badge(r.on)+'</td><td style="color:var(--green)">'+r.d8+'</td><td>'+fd(r.son)+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
 }
+fu
+  if(window.fbSave){var _d=Object.assign({},sikayetData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('sikayet',_d).then(function(id){if(id)sikayetData[0]._fbId=id;});}
 function saveSikayet(){
   if(!document.getElementById('s-musteri').value){toast('Müşteri adı zorunlu!');return;}
   var d8Sec=document.getElementById('s-8d').value;
   var d8ref='—';
   if(d8Sec==='Evet'){data8d.unshift({no:'8D-0'+nextId8d++,t:td0(),prob:document.getElementById('s-konu').value,a:document.getElementById('s-urun').value||'—',p:'Final Kontrol',on:document.getElementById('s-oncelik').value,sor:'KM',acil:'Müşteri şikayeti - acil önlem',du:'Açıldı'});d8ref='8D-0'+(nextId8d-1);}
+    var _photos=collectPhotos('sik-photo-preview');
+  var _files=collectDocs('sik-doc-list');
   sikayetData.unshift({no:'ŞKT-0'+nextSKT++,t:td0(),musteri:document.getElementById('s-musteri').value,konu:document.getElementById('s-konu').value,urun:document.getElementById('s-urun').value||'—',on:document.getElementById('s-oncelik').value,d8:d8ref,son:document.getElementById('s-son').value||'—',du:'Açık'});
   renderSikayet();render8D();closeModal('sikayet-modal');toast('Şikayet kaydı açıldı.'+(d8Sec==='Evet'?' 8D de açıldı.':''));
   clr(['s-musteri','s-konu','s-urun','s-son','s-detay']);
@@ -2232,8 +2558,11 @@ function saveTed(){
   if(!document.getElementById('t-ad').value){toast('Tedarikçi adı zorunlu!');return;}
   var ks=parseInt(document.getElementById('t-kskor').value)||0;
   var ts=parseInt(document.getElementById('t-tskor').value)||0;
+    var _photos=collectPhotos('ted-photo-preview');
+  var _files=collectDocs('ted-doc-list');
   tedData.push({ad:document.getElementById('t-ad').value,mal:document.getElementById('t-mal').value||'—',ulke:document.getElementById('t-ulke').value||'—',kskor:ks,tskor:ts,genel:Math.round((ks+ts)/2),valDate:td0(),du:document.getElementById('t-durum').value});
   renderTed();closeModal('ted-modal');toast('Tedarikçi eklendi.');
+  if(window.fbSave){var _d=Object.assign({},tedData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('ted',_d).then(function(id){if(id)tedData[0]._fbId=id;});}
   clr(['t-ad','t-mal','t-ulke','t-kskor','t-tskor']);
 }
 
@@ -2243,8 +2572,11 @@ function renderSatin(){
 }
 function saveSatin(){
   if(!document.getElementById('sa-mal').value){toast('Malzeme adı zorunlu!');return;}
+    var _photos=collectPhotos('satin-photo-preview');
+  var _files=collectDocs('satin-doc-list');
   satinData.unshift({t:td0(),mal:document.getElementById('sa-mal').value,ted:document.getElementById('sa-ted').value||'—',miktar:document.getElementById('sa-miktar').value||'—',ts:document.getElementById('sa-ts').value,coa:document.getElementById('sa-coa').value,gkk:document.getElementById('sa-gkk').value,du:'Devam'});
   renderSatin();closeModal('satin-modal');toast('Satın alma kaydı eklendi.');
+  if(window.fbSave){var _d=Object.assign({},satinData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('satin',_d).then(function(id){if(id)satinData[0]._fbId=id;});}
   clr(['sa-mal','sa-ted','sa-miktar']);
 }
 
@@ -2276,8 +2608,11 @@ function delDoc(idx){if(confirm('Bu dokümanı silmek istiyor musunuz?')){docDat
 function saveDoc(){
   if(!document.getElementById('doc-no').value||!document.getElementById('doc-baslik').value){toast('No ve başlık zorunlu!');return;}
   var files=collectDocs('doc-file-list');
+    var _photos=collectPhotos('doc-ph-photo-preview');
+  var _files=collectDocs('doc-ph-doc-list');
   docData.unshift({no:document.getElementById('doc-no').value,baslik:document.getElementById('doc-baslik').value,tur:document.getElementById('doc-tur').value,rev:document.getElementById('doc-rev').value||'Rev.01',madde:document.getElementById('doc-madde').value,sor:document.getElementById('doc-sor').value||'KM',du:'Taslak',files:files,gecerli:document.getElementById('doc-gecerli').value||'—'});
   renderDocs();closeModal('doc-modal');toast('Doküman eklendi.');
+  if(window.fbSave){var _d=Object.assign({},docData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('dok',_d).then(function(id){if(id)docData[0]._fbId=id;});}
   clr(['doc-no','doc-baslik','doc-sor','doc-gecerli']);
 }
 
@@ -2290,8 +2625,11 @@ function renderEgitim(){
 function saveEgitim(){
   if(!document.getElementById('eg-ad').value){toast('Personel adı zorunlu!');return;}
   var pct=parseInt(document.getElementById('eg-pct').value)||0;
+    var _photos=collectPhotos('egitim-photo-preview');
+  var _files=collectDocs('egitim-doc-list');
   egitimData.unshift({ad:document.getElementById('eg-ad').value,dept:document.getElementById('eg-dept').value,poz:document.getElementById('eg-poz').value||'Personel',egitim:document.getElementById('eg-egitim').value||'—',tarih:document.getElementById('eg-tarih').value||'',sure:parseInt(document.getElementById('eg-sure').value)||0,puan:parseInt(document.getElementById('eg-puan').value)||0,pct:pct,du:pct>=100?'Tamamlandı':pct>0?'Devam Ediyor':'Bekliyor'});
   renderEgitim();closeModal('egitim-modal');toast('Eğitim kaydı eklendi.');
+  if(window.fbSave){var _d=Object.assign({},egitimData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('egitim',_d).then(function(id){if(id)egitimData[0]._fbId=id;});}
   clr(['eg-ad','eg-poz','eg-egitim','eg-tarih','eg-sure','eg-puan','eg-pct']);
 }
 
@@ -2305,8 +2643,11 @@ function saveRisk(){
   var tip=document.getElementById('r-tip').value;
   var pre=tip==='Risk'?'R':'F';
   var no=pre+'-'+(riskData.filter(function(x){return x.tip===tip;}).length+1).toString().padStart(3,'0');
+    var _photos=collectPhotos('risk-photo-preview');
+  var _files=collectDocs('risk-doc-list');
   riskData.unshift({no:no,tanim:document.getElementById('r-tanim').value,kat:document.getElementById('r-kat').value,tip:tip,olas:o,etki:e,skor:o*e,aksiyon:document.getElementById('r-aksiyon').value||'—',sor:document.getElementById('r-sor').value||'KM',du:'Açık'});
   renderRisk();closeModal('risk-modal');toast('Risk kaydı eklendi.');
+  if(window.fbSave){var _d=Object.assign({},riskData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('risk',_d).then(function(id){if(id)riskData[0]._fbId=id;});}
   clr(['r-tanim','r-aksiyon','r-sor','r-olas','r-etki']);
 }
 
@@ -2315,8 +2656,11 @@ function renderDenetim(){
   tbody.innerHTML=denetimData.map(function(r){return'<tr><td>'+fd(r.t)+'</td><td>'+r.kapsam+'</td><td><span class="badge bb" style="font-size:9px">'+r.madde+'</span></td><td>'+r.den+'</td><td style="text-align:center">'+r.bulgu+'</td><td style="text-align:center">'+badge(r.uyg>0?'Uygunsuzluk Var':'Bulgu Yok')+'</td><td style="color:var(--green)">'+r.capa+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
 }
 function saveDenetim(){
+    var _photos=collectPhotos('denet-photo-preview');
+  var _files=collectDocs('denet-doc-list');
   denetimData.unshift({t:document.getElementById('dn-tarih').value||td0(),kapsam:document.getElementById('dn-kapsam').value||'—',madde:document.getElementById('dn-madde').value,den:document.getElementById('dn-den').value||'KM',bulgu:0,uyg:0,capa:'—',du:'Planlandı'});
   renderDenetim();closeModal('denetim-modal');toast('Denetim planlandı.');
+  if(window.fbSave){var _d=Object.assign({},denetimData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('denetim',_d).then(function(id){if(id)denetimData[0]._fbId=id;});}
   clr(['dn-tarih','dn-kapsam','dn-den','dn-not']);
 }
 
@@ -2325,8 +2669,11 @@ function renderYGR(){
   tbody.innerHTML=ygrData.map(function(r){return'<tr><td>'+fd(r.t)+'</td><td>'+r.katilim+'</td><td style="text-align:center">'+r.karar+'</td><td style="font-size:11px">'+r.aksiyon+'</td><td>'+badge(r.du)+'</td></tr>';}).join('');
 }
 function saveYGR(){
+    var _photos=collectPhotos('ygr-photo-preview');
+  var _files=collectDocs('ygr-doc-list');
   ygrData.unshift({t:document.getElementById('y-tarih').value||td0(),katilim:document.getElementById('y-katilim').value||'—',karar:0,aksiyon:document.getElementById('y-gundem').value||'—',du:'Planlandı'});
   renderYGR();closeModal('ygr-modal');toast('YGG toplantısı planlandı.');
+  if(window.fbSave){var _d=Object.assign({},ygrData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('ygr',_d).then(function(id){if(id)ygrData[0]._fbId=id;});}
   clr(['y-tarih','y-katilim','y-gundem']);
 }
 
@@ -2372,8 +2719,11 @@ function render5S(){
 }
 function save5S(){
   var sc=[0,1,2,3,4].map(function(i){return Math.min(20,parseInt(document.getElementById('s-'+i).value)||0);});
+    var _photos=collectPhotos('s5-photo-preview');
+  var _files=collectDocs('s5-doc-list');
   data5s.unshift({t:td0(),b:document.getElementById('s-bolge').value,s:sc,top:sc.reduce(function(a,b){return a+b;},0),den:document.getElementById('s-den').value||'KM',not:document.getElementById('s-not').value});
   render5S();renderDash();closeModal('5s-modal');toast('5S denetimi kaydedildi.');
+  if(window.fbSave){var _d=Object.assign({},data5s[0]);delete _d.photos;_d.photos=_photos||[];fbSave('5s',_d).then(function(id){if(id)data5s[0]._fbId=id;});}
   [0,1,2,3,4].forEach(function(i){document.getElementById('s-'+i).value='';});
   clr(['s-den','s-not']);
 }
@@ -2384,8 +2734,11 @@ function renderLot(){
 }
 function saveLot(){
   if(!document.getElementById('l-no').value){toast('Lot No zorunlu!');return;}
+    var _photos=collectPhotos('lot-photo-preview');
+  var _files=collectDocs('lot-doc-list');
   lotData.unshift({no:document.getElementById('l-no').value,a:document.getElementById('l-agac').value,gkk:document.getElementById('l-gkk').value||'—',firın:document.getElementById('l-firın').value||'—',final:document.getElementById('l-final').value||'—',musteri:document.getElementById('l-musteri').value||'—',paket:document.getElementById('l-paket').value||'—',sevk:document.getElementById('l-sevk').value||'—',du:'Aktif'});
   renderLot();closeModal('lot-modal');toast('Lot kaydı oluşturuldu.');
+  if(window.fbSave){var _d=Object.assign({},lotData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('lot',_d).then(function(id){if(id)lotData[0]._fbId=id;});}
   clr(['l-no','l-gkk','l-firın','l-final','l-musteri','l-paket','l-sevk']);
 }
 
@@ -2402,8 +2755,11 @@ function renderEnerji(){
 function saveEnerji(){
   var el=parseFloat(document.getElementById('en-el').value)||0;
   var gaz=parseFloat(document.getElementById('en-gaz').value)||0;
+    var _photos=collectPhotos('enerji-photo-preview');
+  var _files=collectDocs('enerji-doc-list');
   enerjiData.unshift({t:document.getElementById('en-tarih').value||td0(),bolge:document.getElementById('en-bolge').value,el:el,gaz:gaz,talat:parseFloat(document.getElementById('en-talat').value)||0,geri:parseFloat(document.getElementById('en-geri').value)||0,co2:Math.round(el*0.45+gaz*2.02)});
   renderEnerji();closeModal('enerji-modal');toast('Enerji kaydı eklendi.');
+  if(window.fbSave){var _d=Object.assign({},enerjiData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('enerji',_d).then(function(id){if(id)enerjiData[0]._fbId=id;});}
   clr(['en-tarih','en-el','en-gaz','en-talat','en-geri']);
 }
 
@@ -2413,8 +2769,11 @@ function renderBilgi(){
 }
 function saveBilgi(){
   if(!document.getElementById('bi-baslik').value){toast('Başlık zorunlu!');return;}
+    var _photos=collectPhotos('bilgi-photo-preview');
+  var _files=collectDocs('bilgi-doc-list');
   bilgiData.unshift({baslik:document.getElementById('bi-baslik').value,kat:document.getElementById('bi-kat').value,ozet:document.getElementById('bi-icerik').value.slice(0,60)+'...',guncelleme:td0(),sor:document.getElementById('bi-sor').value||'KM',erisim:document.getElementById('bi-erisim').value});
   renderBilgi();closeModal('bilgi-modal');toast('Bilgi kaydı eklendi.');
+  if(window.fbSave){var _d=Object.assign({},bilgiData[0]);delete _d.photos;_d.photos=_photos||[];fbSave('bilgi',_d).then(function(id){if(id)bilgiData[0]._fbId=id;});}
   clr(['bi-baslik','bi-icerik','bi-sor']);
 }
 
