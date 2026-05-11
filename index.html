@@ -1669,29 +1669,74 @@ function closeSidebar(){document.getElementById('sidebar').classList.remove('ope
 // ============ PHOTO HANDLER ============
 function handlePhotos(input,previewId){
   var preview=document.getElementById(previewId);if(!preview)return;
-  Array.from(input.files).forEach(function(file){
+  var files=Array.from(input.files);
+  files.forEach(function(file){
     var reader=new FileReader();
     reader.onload=function(e){
       var img=new Image();
       img.onload=function(){
+        // Önce küçük thumbnail göster
         var canvas=document.createElement('canvas');
         var mw=800,mh=800,w=img.width,h=img.height;
         if(w>mw){h=Math.round(h*mw/w);w=mw;}
         if(h>mh){w=Math.round(w*mh/h);h=mh;}
-        canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);
-        var src=canvas.toDataURL('image/jpeg',0.75);
-        var wrap=document.createElement('div');wrap.style.cssText='position:relative;display:inline-block;margin:2px';
-        var thumb=document.createElement('img');thumb.src=src;thumb.className='photo-thumb';
-        thumb.style.cursor='zoom-in';thumb.title='Büyütmek için tıkla';
-        thumb.onclick=function(){openPhotoViewer([{src:src,name:file.name}],0);};
-        var del=document.createElement('button');del.innerHTML='&times;';del.title='Kaldır';
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        var localSrc=canvas.toDataURL('image/jpeg',0.75);
+
+        var wrap=document.createElement('div');
+        wrap.style.cssText='position:relative;display:inline-block;margin:2px';
+        var thumb=document.createElement('img');
+        thumb.src=localSrc;thumb.className='photo-thumb';
+        thumb.style.cursor='zoom-in';thumb.title='Yükleniyor...';
+        thumb.dataset.localSrc=localSrc;
+        thumb.dataset.cloudUrl=''; // Cloudinary URL sonra gelecek
+        thumb.onclick=function(){
+          var src=thumb.dataset.cloudUrl||thumb.dataset.localSrc;
+          openPhotoViewer([{src:src,name:file.name}],0);
+        };
+
+        // Yükleniyor göstergesi
+        var spinner=document.createElement('div');
+        spinner.style.cssText='position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;font-size:9px;padding:1px 4px;border-radius:3px';
+        spinner.textContent='⏳';
+        wrap.appendChild(thumb);wrap.appendChild(spinner);
+
+        var del=document.createElement('button');
+        del.innerHTML='&times;';del.title='Kaldır';
         del.style.cssText='position:absolute;top:-5px;right:-5px;background:#a32d2d;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;z-index:2;line-height:1';
         del.onclick=function(e){e.stopPropagation();wrap.remove();};
-        wrap.appendChild(thumb);wrap.appendChild(del);preview.appendChild(wrap);
-      };img.src=e.target.result;
-    };reader.readAsDataURL(file);
+        wrap.appendChild(del);
+        preview.appendChild(wrap);
+
+        // Cloudinary'e yükle
+        if(window.uploadToCloudinary){
+          // Canvas'tan blob oluştur
+          canvas.toBlob(function(blob){
+            var uploadFile=new File([blob],file.name,{type:'image/jpeg'});
+            uploadToCloudinary(uploadFile).then(function(url){
+              if(url){
+                thumb.dataset.cloudUrl=url;
+                thumb.src=url; // Cloudinary URL'ini kullan
+                thumb.title='Büyütmek için tıkla: '+file.name;
+                spinner.textContent='✅';
+                setTimeout(function(){spinner.remove();},2000);
+              } else {
+                spinner.textContent='⚠️';
+                spinner.title='Cloudinary yükleme başarısız, yerel kullanılıyor';
+              }
+            });
+          },'image/jpeg',0.75);
+        } else {
+          spinner.remove();
+        }
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
   });
 }
+
 function openPhotoViewer(photos,startIdx){
   var list=typeof photos==='string'?[{src:photos,name:'Fotoğraf'}]:Array.isArray(photos)?photos.map(function(p,i){return typeof p==='string'?{src:p,name:'Fotoğraf '+(i+1)}:p;}):[];
   if(!list.length)return;
@@ -1741,7 +1786,13 @@ function viewSavedFiles(fileArr,title){
   });
   ov.appendChild(box);ov.onclick=function(e){if(e.target===ov)ov.remove();};document.body.appendChild(ov);
 }
-function collectPhotos(previewId){var prev=document.getElementById(previewId);if(!prev)return[];return Array.from(prev.querySelectorAll('img')).map(function(img){return img.src;});}
+function collectPhotos(previewId){
+  var prev=document.getElementById(previewId);if(!prev)return[];
+  return Array.from(prev.querySelectorAll('img')).map(function(img){
+    // Cloudinary URL varsa onu kullan, yoksa local base64
+    return img.dataset&&img.dataset.cloudUrl?img.dataset.cloudUrl:img.src;
+  });
+}
 function handleDocs(input,listId){
   var list=document.getElementById(listId);if(!list)return;
   Array.from(input.files).forEach(function(file){
