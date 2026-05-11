@@ -1984,22 +1984,8 @@ function renderDash(){
   }
 }
 
-function renderGKK(){
-  var s=(document.getElementById('gkk-search')||{value:''}).value.toLowerCase();
-  var af=(document.getElementById('gkk-af')||{value:''}).value;
-  var kf=(document.getElementById('gkk-kf')||{value:''}).value;
-  var d=gkkData.filter(function(r){return(!s||(r.a+r.ted+r.parti).toLowerCase().includes(s))&&(!af||r.a===af)&&(!kf||r.k===kf);});
-  var tbody=document.getElementById('gkk-tbody');if(!tbody)return;
-  tbody.innerHTML=d.map(function(r){return'<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.ted+'</td><td>'+r.parti+'</td><td>'+r.m+'</td><td style="font-weight:600;color:'+(r.nem>=4&&r.nem<=8?'var(--green)':r.nem>8.5?'var(--red)':'var(--amber)')+'">'+r.nem+'</td><td>'+badge(r.g)+'</td><td>'+badge(r.b)+'</td><td>'+badge(r.k)+'</td><td style="color:var(--muted)">'+(r.foto>0?'&#128247;'+r.foto:'—')+'</td><td style="color:var(--muted);font-size:11px">'+r.not+'</td></tr>';}).join('');
-  var cnt=document.getElementById('gkk-count');if(cnt)cnt.textContent=d.length+' kayıt';
-}
-function saveGKK(){
-  if(!document.getElementById('g-ted').value){toast('Tedarikçi zorunlu!');return;}
-  gkkData.unshift({t:td0(),a:document.getElementById('g-agac').value,ted:document.getElementById('g-ted').value,parti:document.getElementById('g-parti').value||'—',m:document.getElementById('g-miktar').value||'—',nem:parseFloat(document.getElementById('g-nem').value)||0,g:document.getElementById('g-gorsel').value,b:document.getElementById('g-boyut').value,k:document.getElementById('g-karar').value,kayit:document.getElementById('g-kayit').value||'KM',foto:document.getElementById('g-photo-preview').children.length,not:document.getElementById('g-not').value});
-  renderGKK();renderDash();closeModal('gkk-modal');toast('GKK kaydı eklendi.');
-  clr(['g-ted','g-parti','g-miktar','g-nem','g-kayit','g-not']);
-  document.getElementById('g-photo-preview').innerHTML='';
-}
+
+
 
 
 
@@ -2797,77 +2783,12 @@ function calcNemGKK() {
 // ═══════════════════════════════════════════════════
 // saveGKK
 // ═══════════════════════════════════════════════════
-function saveGKK() {
-  var ted = (document.getElementById('g-ted')||{}).value;
-  if (!ted || !ted.trim()) { toast('Tedarikçi adı zorunlu!'); return; }
-  calcNemGKK();
-  var nem = parseFloat((document.getElementById('g-nem')||{value:'0'}).value) || 0;
-  var mn  = parseFloat((document.getElementById('g-nem-min')||{value:'4'}).value) || 4;
-  var mx  = parseFloat((document.getElementById('g-nem-max')||{value:'8'}).value) || 8;
-  var nemOk = nem > 0 ? (nem >= mn && nem <= mx) : null;
-  var dims  = _collectDimRows('gkk-dim-rows');
-  var photos = collectPhotos('g-photo-preview');
-  var files  = collectDocs('g-doc-list');
-  gkkData.unshift({
-    t: td0(), a: document.getElementById('g-agac').value,
-    ted: ted.trim(),
-    parti: (document.getElementById('g-parti')||{value:'—'}).value || '—',
-    m:     (document.getElementById('g-miktar')||{value:'—'}).value || '—',
-    nem: nem, nemMin: mn, nemMax: mx, nemOk: nemOk,
-    dims: dims,
-    g: (document.getElementById('g-gorsel')||{value:'Uygun'}).value,
-    k: (document.getElementById('g-karar') ||{value:'Kabul'}).value,
-    kayit: (document.getElementById('g-kayit')||{value:'KM'}).value || 'KM',
-    photos: photos, files: files, foto: photos.length, docCount: files.length,
-    not: (document.getElementById('g-not')||{value:''}).value
-  });
-  renderGKK(); renderDash();
-  closeModal('gkk-modal');
-  toast('GKK kaydı eklendi ✓');
-  ['g-ted','g-parti','g-miktar','g-nem','g-nem1','g-nem2','g-nem3','g-nem-min','g-nem-max','g-kayit','g-not'].forEach(function(id){var e=document.getElementById(id);if(e){e.value='';e.style.color='';e.style.background='';}});
-  ['g-photo-preview','g-doc-list','gkk-dim-rows'].forEach(function(id){var e=document.getElementById(id);if(e)e.innerHTML='';});
-  var ni=document.getElementById('g-nem-icon');if(ni)ni.textContent='';
-  var nr=document.getElementById('g-nem-result');if(nr)nr.style.display='none';
-  _dimId = 0;
-}
+
 
 // ═══════════════════════════════════════════════════
 // renderGKK
 // ═══════════════════════════════════════════════════
-function renderGKK() {
-  var sv = (document.getElementById('gkk-search')||{value:''}).value.toLowerCase();
-  var af = (document.getElementById('gkk-af')||{value:''}).value;
-  var kf = (document.getElementById('gkk-kf')||{value:''}).value;
-  var d = gkkData.filter(function(r){
-    return (!sv||(r.a+r.ted+r.parti).toLowerCase().includes(sv)) && (!af||r.a===af) && (!kf||r.k===kf);
-  });
-  var tb = document.getElementById('gkk-tbody'); if (!tb) return;
-  tb.innerHTML = d.length ? d.map(function(r) {
-    var idx = gkkData.indexOf(r);
-    // Nem
-    var nc = r.nem>0 ? (r.nemOk===true?'var(--green)':r.nemOk===false?'var(--red)':'var(--amber)') : 'var(--muted)';
-    var nemH = r.nem > 0
-      ? ('<span style="font-weight:700;color:'+nc+'">' + (r.nemOk===true?'✓ ':r.nemOk===false?'✗ ':'') + r.nem + '%</span>')
-      : '—';
-    // Boyutlar
-    var dimH = '—';
-    if (r.dims && r.dims.length) {
-      var dFail = r.dims.filter(function(d){return d.ok===false;}).length;
-      var dOk   = r.dims.filter(function(d){return d.ok===true;}).length;
-      var dimTooltip = r.dims.map(function(d){return(d.name||'?')+': '+(d.olcum||'—')+'mm';}).join(' | ');
-      dimH = '<span class="badge '+(dFail>0?'br':dOk>0?'bg':'bgr')+'" title="'+dimTooltip+'" style="cursor:help">'+r.dims.length+' profil '+(dFail>0?'✗':'✓')+'</span>';
-    }
-    // Foto/dosya butonları
-    var fBtn = r.photos&&r.photos.length ? ('<button class="btn btn-sm" onclick="viewSavedPhotos(gkkData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> ') : '';
-    var dBtn = r.files&&r.files.length   ? ('<button class="btn btn-sm" onclick="viewGKKFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> ') : '';
-    var noM  = (!r.photos||!r.photos.length) && (!r.files||!r.files.length) ? '—' : '';
-    var delB = '<button class="btn btn-sm" onclick="delGKK('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00" title="Sil">🗑</button>';
-    return '<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.ted+'</td><td>'+r.parti+'</td><td>'+r.m+'</td>'
-      +'<td>'+nemH+'</td><td>'+dimH+'</td><td>'+badge(r.g)+'</td><td>'+badge(r.k)+'</td>'
-      +'<td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td><td>'+delB+'</td></tr>';
-  }).join('') : '<tr><td colspan="11" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz GKK kaydı yok</td></tr>';
-  var cnt = document.getElementById('gkk-count'); if (cnt) cnt.textContent = d.length + ' kayıt';
-}
+
 function delGKK(idx){if(confirm('Bu kaydı silmek istiyor musunuz?')){gkkData.splice(idx,1);renderGKK();renderDash();toast('Silindi ✓');}}
 function viewGKKFiles(idx){var r=gkkData[idx];if(r&&r.files&&r.files.length)viewSavedFiles(r.files,'GKK Belgeler');else toast('Belge yok');}
 
@@ -3057,126 +2978,18 @@ function calcNemProses() { _calcNem('p-'); }
 function calcNemFinal()  { _calcNem('f-'); }
 
 // ─── saveProses — nem + boyut + foto + dosya ──────────────
-function saveProses() {
-  var params  = _collectDimRows('proses-param-rows');
-  var fail    = params.filter(function(p){return p.ok===false;}).length;
-  var sonuc   = params.length ? (fail>0?'Uygun Değil':'Uygun') : 'Uygun';
-  calcNemProses();
-  var nem     = parseFloat((document.getElementById('p-nem')||{value:'0'}).value)||0;
-  var nemMin  = parseFloat((document.getElementById('p-nem-min')||{value:'4'}).value)||4;
-  var nemMax  = parseFloat((document.getElementById('p-nem-max')||{value:'8'}).value)||8;
-  var nemOk   = nem>0 ? (nem>=nemMin&&nem<=nemMax) : null;
-  var photos  = collectPhotos('p-photo-preview');
-  var files   = collectDocs('p-doc-list');
-  prosesData.unshift({
-    t:td0(), a:(document.getElementById('p-agac')||{value:''}).value,
-    p:(document.getElementById('p-proses')||{value:''}).value,
-    parti:(document.getElementById('p-parti')||{value:'—'}).value||'—',
-    op:(document.getElementById('p-op')||{value:'KM'}).value||'KM',
-    nem:nem, nem1:(document.getElementById('p-nem1')||{value:''}).value,
-    nem2:(document.getElementById('p-nem2')||{value:''}).value,
-    nem3:(document.getElementById('p-nem3')||{value:''}).value,
-    nemMin:nemMin, nemMax:nemMax, nemOk:nemOk,
-    params:params, sonuc:sonuc,
-    photos:photos, files:files, foto:photos.length, docCount:files.length,
-    not:(document.getElementById('p-not')||{value:''}).value
-  });
-  renderProses(); closeModal('proses-modal'); toast('Proses kaydı eklendi ✓');
-  ['p-parti','p-op','p-not','p-nem','p-nem1','p-nem2','p-nem3','p-nem-min','p-nem-max'].forEach(function(id){
-    var e=document.getElementById(id); if(e){e.value=(id==='p-nem-min'?'4':id==='p-nem-max'?'8':''); e.style.color=''; e.style.background='';}
-  });
-  ['p-photo-preview','p-doc-list','proses-param-rows'].forEach(function(id){var e=document.getElementById(id);if(e)e.innerHTML='';});
-  var ni=document.getElementById('p-nem-icon');if(ni)ni.textContent='';
-  var nr=document.getElementById('p-nem-result');if(nr)nr.style.display='none';
-}
+
 
 // ─── saveFinal — nem + boyut + foto + dosya ───────────────
-function saveFinal() {
-  var dims    = _collectDimRows('final-dim-rows');
-  var fail    = dims.filter(function(d){return d.ok===false;}).length;
-  var boyutK  = dims.length ? (fail>0?'Uygun Değil':'Uygun') : (document.getElementById('f-gorsel')||{value:'Uygun'}).value;
-  calcNemFinal();
-  var nem     = parseFloat((document.getElementById('f-nem')||{value:'0'}).value)||0;
-  var nemMin  = parseFloat((document.getElementById('f-nem-min')||{value:'4'}).value)||4;
-  var nemMax  = parseFloat((document.getElementById('f-nem-max')||{value:'8'}).value)||8;
-  var nemOk   = nem>0 ? (nem>=nemMin&&nem<=nemMax) : null;
-  var photos  = collectPhotos('f-photo-preview');
-  var files   = collectDocs('f-doc-list');
-  finalData.unshift({
-    t:td0(), a:(document.getElementById('f-agac')||{value:''}).value,
-    parti:(document.getElementById('f-parti')||{value:'—'}).value||'—',
-    m:(document.getElementById('f-miktar')||{value:'—'}).value||'—',
-    profil:(document.getElementById('f-profil')||{value:'—'}).value||'—',
-    g:(document.getElementById('f-gorsel')||{value:'Uygun'}).value,
-    mu:(document.getElementById('f-musteri')||{value:'—'}).value,
-    k:(document.getElementById('f-karar')||{value:'Sevkiyat'}).value,
-    nem:nem, nem1:(document.getElementById('f-nem1')||{value:''}).value,
-    nem2:(document.getElementById('f-nem2')||{value:''}).value,
-    nem3:(document.getElementById('f-nem3')||{value:''}).value,
-    nemMin:nemMin, nemMax:nemMax, nemOk:nemOk,
-    dims:dims, b:boyutK,
-    photos:photos, files:files, foto:photos.length, docCount:files.length,
-    not:(document.getElementById('f-not')||{value:''}).value
-  });
-  renderFinal(); closeModal('final-modal'); toast('Final kaydı eklendi ✓');
-  ['f-parti','f-miktar','f-profil','f-not','f-nem','f-nem1','f-nem2','f-nem3','f-nem-min','f-nem-max'].forEach(function(id){
-    var e=document.getElementById(id); if(e){e.value=(id==='f-nem-min'?'4':id==='f-nem-max'?'8':''); e.style.color=''; e.style.background='';}
-  });
-  ['f-photo-preview','f-doc-list','final-dim-rows'].forEach(function(id){var e=document.getElementById(id);if(e)e.innerHTML='';});
-  var ni=document.getElementById('f-nem-icon');if(ni)ni.textContent='';
-  var nr=document.getElementById('f-nem-result');if(nr)nr.style.display='none';
-}
+
 
 // ─── renderProses — nem + boyut göster ───────────────────
-function renderProses() {
-  var fp = document.getElementById('p-fp'); var fpv=fp?fp.value:'';
-  var d = fpv?prosesData.filter(function(r){return r.p===fpv;}):prosesData;
-  var tb = document.getElementById('proses-tbody'); if(!tb)return;
-  tb.innerHTML = d.length ? d.map(function(r){
-    var idx = prosesData.indexOf(r);
-    // Nem badge
-    var nc = r.nem>0?(r.nemOk===true?'var(--green)':r.nemOk===false?'var(--red)':'var(--amber)'):'var(--muted)';
-    var nemH = r.nem>0?('<span style="font-weight:700;color:'+nc+'">'+(r.nemOk===true?'✓ ':r.nemOk===false?'✗ ':'')+r.nem+'%</span>'):'—';
-    // Parametre badge
-    var paramH = '—';
-    if(r.params&&r.params.length){
-      var pF=r.params.filter(function(p){return p.ok===false;}).length;
-      var pO=r.params.filter(function(p){return p.ok===true;}).length;
-      var tip=r.params.map(function(p){return(p.name||'?')+': '+(p.olcum||'—');}).join(' | ');
-      paramH='<span class="badge '+(pF>0?'br':pO>0?'bg':'bgr')+'" title="'+tip+'" style="cursor:help">'+r.params.length+' param '+(pF>0?'✗':'✓')+'</span>';
-    }
-    var fBtn=r.photos&&r.photos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(prosesData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> '):'';
-    var dBtn=r.files&&r.files.length?('<button class="btn btn-sm" onclick="viewProsesFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> '):'';
-    var noM=(!r.photos||!r.photos.length)&&(!r.files||!r.files.length)?'—':'';
-    var delB='<button class="btn btn-sm" onclick="delProses('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
-    return'<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.p+'</td><td>'+r.parti+'</td><td>'+nemH+'</td><td>'+paramH+'</td><td>'+badge(r.sonuc||'Uygun')+'</td><td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td><td>'+r.op+'</td><td>'+delB+'</td></tr>';
-  }).join(''):'<tr><td colspan="10" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz proses kaydı yok</td></tr>';
-  var cnt=document.getElementById('p-count');if(cnt)cnt.textContent=d.length+' kayıt';
-}
+
 function delProses(idx){if(confirm('Silinsin mi?')){prosesData.splice(idx,1);renderProses();toast('Silindi ✓');}}
 function viewProsesFiles(idx){var r=prosesData[idx];if(r&&r.files&&r.files.length)viewSavedFiles(r.files,'Proses Belgeler');else toast('Belge yok');}
 
 // ─── renderFinal — nem + boyut göster ────────────────────
-function renderFinal() {
-  var tb=document.getElementById('final-tbody');if(!tb)return;
-  tb.innerHTML=finalData.length?finalData.map(function(r){
-    var idx=finalData.indexOf(r);
-    var nc=r.nem>0?(r.nemOk===true?'var(--green)':r.nemOk===false?'var(--red)':'var(--amber)'):'var(--muted)';
-    var nemH=r.nem>0?('<span style="font-weight:700;color:'+nc+'">'+(r.nemOk===true?'✓ ':r.nemOk===false?'✗ ':'')+r.nem+'%</span>'):'—';
-    var dimH='—';
-    if(r.dims&&r.dims.length){
-      var dF=r.dims.filter(function(d){return d.ok===false;}).length;
-      var dO=r.dims.filter(function(d){return d.ok===true;}).length;
-      var tip=r.dims.map(function(d){return(d.name||'?')+': '+(d.olcum||'—')+'mm';}).join(' | ');
-      dimH='<span class="badge '+(dF>0?'br':dO>0?'bg':'bgr')+'" title="'+tip+'" style="cursor:help">'+r.dims.length+' nokta '+(dF>0?'✗':'✓')+'</span>';
-    }
-    var fBtn=r.photos&&r.photos.length?('<button class="btn btn-sm" onclick="viewSavedPhotos(finalData['+idx+'].photos)" style="font-size:10px;padding:2px 7px;background:#1565c0;color:#fff;border-color:#1565c0">📷'+r.photos.length+'</button> '):'';
-    var dBtn=r.files&&r.files.length?('<button class="btn btn-sm" onclick="viewFinalFiles('+idx+')" style="font-size:10px;padding:2px 7px">📄'+r.files.length+'</button> '):'';
-    var noM=(!r.photos||!r.photos.length)&&(!r.files||!r.files.length)?'—':'';
-    var delB='<button class="btn btn-sm" onclick="delFinal('+idx+')" style="font-size:10px;padding:2px 7px;background:#fff0f0;color:#c00;border-color:#c00">🗑</button>';
-    return'<tr><td>'+fd(r.t)+'</td><td>'+r.a+'</td><td>'+r.parti+'</td><td>'+r.m+'</td><td>'+r.profil+'</td><td>'+nemH+'</td><td>'+dimH+'</td><td>'+badge(r.g)+'</td><td>'+badge(r.k)+'</td><td>'+r.mu+'</td><td style="white-space:nowrap">'+noM+fBtn+dBtn+'</td><td>'+delB+'</td></tr>';
-  }).join(''):'<tr><td colspan="12" style="text-align:center;padding:20px;color:var(--muted);font-size:11px">Henüz final kaydı yok</td></tr>';
-}
+
 function delFinal(idx){if(confirm('Silinsin mi?')){finalData.splice(idx,1);renderFinal();toast('Silindi ✓');}}
 function viewFinalFiles(idx){var r=finalData[idx];if(r&&r.files&&r.files.length)viewSavedFiles(r.files,'Final Belgeler');else toast('Belge yok');}
 
